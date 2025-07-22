@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    android:layout_marginBottom="12dp"
+    app:cardBackgroundColor="@color/colorSurface"
+    app:strokeColor="@color/colorPrimary"
+    app:strokeWidth="0dp"
+    android:foreground="@drawable/bg_course_item"
+    android:clickable="true"
+    android:focusable="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <CheckBox
+                android:id="@+id/checkBoxSelect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:clickable="false"
+                android:layout_marginEnd="8dp"/>
+
+            <TextView
+                android:id="@+id/tvCourseTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Course Name"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/colorTextPrimary"
+                android:contentDescription="Course name"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="4dp">
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@android:drawable/ic_menu_my_calendar"
+                android:contentDescription="Schedule icon"
+                app:tint="@color/colorPrimary"
+                android:layout_marginEnd="4dp"/>
+            <TextView
+                android:id="@+id/tvCourseSchedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date @ Time 22 Duration 22 Capacity"
+                android:textSize="14sp"
+                android:textColor="@color/colorTextSecondary"
+                android:paddingBottom="4dp"
+                android:contentDescription="Course schedule"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="2dp">
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@android:drawable/ic_menu_info_details"
+                android:contentDescription="Type icon"
+                app:tint="@color/colorSecondary"
+                android:layout_marginEnd="4dp"/>
+            <TextView
+                android:id="@+id/tvCourseType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Type"
+                android:textSize="14sp"
+                android:textColor="@color/colorSecondary"
+                android:contentDescription="Course type"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="2dp">
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@android:drawable/ic_menu_manage"
+                android:contentDescription="Price icon"
+                app:tint="@color/colorAccent"
+                android:layout_marginEnd="4dp"/>
+            <TextView
+                android:id="@+id/tvCoursePrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Price"
+                android:textSize="14sp"
+                android:textColor="@color/colorAccent"
+                android:contentDescription="Course price"/>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvCourseDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Description"
+            android:textSize="13sp"
+            android:textColor="@color/colorTextSecondary"
+            android:paddingTop="4dp"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:contentDescription="Course description"/>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorBackground">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:title="Confirm Course Details"
+        android:titleTextColor="@color/colorOnPrimary"
+        app:navigationIcon="@drawable/ic_arrow_back_24"
+        app:titleCentered="true"/>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Card 1: Course Name & Type -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp">
+                <LinearLayout
+                    android:orientation="vertical"
+                        android:padding="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                            android:text="Course Name"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/colorAccent"
+                        android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/tvSummaryCourseName"
+                            android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorPrimary"
+                            android:paddingBottom="8dp"/>
+                    <TextView
+                            android:text="Type"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/colorAccent"
+                        android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/tvSummaryType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="16sp"
+                            android:paddingBottom="0dp"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Card 2: Schedule (Day(s) of Week, Time, Duration) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:padding="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="Schedule"
+                        android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/colorAccent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="8dp"/>
+                    <TextView
+                            android:text="Day(s) of Week"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                        android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/tvSummaryDate"
+                            android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:paddingBottom="4dp"/>
+                    <TextView
+                            android:text="Time"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                        android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/tvSummaryTime"
+                            android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:paddingBottom="4dp"/>
+                    <TextView
+                            android:text="Duration"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                        android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/tvSummaryDuration"
+                            android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:paddingBottom="0dp"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Card 3: Details (Capacity, Price, Room Location) -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:padding="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <TextView
+                            android:text="Details"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/colorAccent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                            android:paddingBottom="8dp"/>
+                    <TextView
+                            android:text="Capacity"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                        android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/tvSummaryCapacity"
+                            android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:paddingBottom="4dp"/>
+                    <TextView
+                            android:text="Price"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                        android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/tvSummaryPrice"
+                            android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:paddingBottom="4dp"/>
+                    <TextView
+                            android:text="Room Location"
+                            android:textStyle="bold"
+                            android:textSize="14sp"
+                        android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+                        <TextView
+                            android:id="@+id/tvSummaryRoomLocation"
+                            android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                            android:textSize="15sp"
+                            android:paddingBottom="0dp"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Card 4: Description -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="12dp"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:padding="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TextView
+                            android:text="Description"
+                            android:textStyle="bold"
+                            android:textSize="16sp"
+                            android:textColor="@color/colorAccent"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="8dp"/>
+                        <TextView
+                            android:id="@+id/tvSummaryDescription"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textSize="15sp"/>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Buttons -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                    android:gravity="center"
+                        android:orientation="horizontal"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="16dp">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnConfirmCourse"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Confirm"
+                            style="@style/Widget.MaterialComponents.Button"
+                            app:backgroundTint="@color/colorPrimary"
+                            android:textColor="@color/colorOnPrimary"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnCancelConfirm"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Cancel"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            app:strokeColor="@color/colorAccent"
+                            app:strokeWidth="2dp"
+                            android:textColor="@color/colorAccent"
+                            android:layout_marginStart="16dp"/>
+                    </LinearLayout>
+                </LinearLayout>
+        </ScrollView>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+    </FrameLayout>
+
+</LinearLayout> 
