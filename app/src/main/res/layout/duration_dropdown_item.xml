@@ -4,21 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="12dp"
-    android:gravity="center_vertical">
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="12dp"
+    android:gravity="center_vertical"
+    android:background="?attr/selectableItemBackground">
 
     <ImageView
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:src="@android:drawable/ic_menu_recent_history"
-        android:contentDescription="Timer icon"
-        app:tint="@color/colorAccent"
-        android:layout_marginEnd="12dp"/>
+        android:src="@drawable/ic_duration"
+        android:contentDescription="Duration icon"
+        app:tint="?attr/colorPrimary"
+        android:layout_marginEnd="16dp"/>
 
     <TextView
         android:id="@+id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="@color/colorTextPrimary"/>
-</LinearLayout> 
+        android:textAppearance="?attr/textAppearanceBodyLarge"
+        android:textColor="?attr/colorOnSurface"/>
+</LinearLayout>

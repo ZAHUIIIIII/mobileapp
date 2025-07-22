@@ -3,19 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@color/md_theme_background">
 
-    <TextView
-        android:id="@+id/tvEmptyInstances"
+    <LinearLayout
+        android:id="@+id/emptyStateLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No class instances found."
-        android:textColor="@color/colorTextSecondary"
-        android:textSize="18sp"
+        android:orientation="vertical"
         android:layout_gravity="center"
-        android:background="@drawable/bg_empty_state"
+        android:gravity="center"
         android:padding="16dp"
-        android:visibility="gone"/>
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:src="@drawable/ic_instances"
+            app:tint="?attr/colorOnSurfaceVariant"
+            android:contentDescription="No instances icon"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/tvEmptyInstances"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No class instances found. Tap + to add one!"
+            android:textAppearance="?attr/textAppearanceBodyLarge"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textAlignment="center"/>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerInstances"
@@ -30,11 +46,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="32dp"
+        android:layout_margin="16dp"
         android:src="@drawable/ic_add"
-        app:backgroundTint="@color/colorAccent"
-        app:tint="@color/colorOnSecondary"
+        app:backgroundTint="?attr/colorPrimary"
+        app:tint="?attr/colorOnPrimary"
         android:contentDescription="Add new class instance"
         android:elevation="8dp"/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout> 
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

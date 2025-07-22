@@ -5,6 +5,7 @@
     android:viewportWidth="24"
     android:viewportHeight="24">
     <path
-        android:fillColor="#3F51B5"
+        android:name="duration_path"
+        android:fillColor="@color/md_theme_onSurface"
         android:pathData="M6,2h12a1,1 0 0 1 1,1v2a5,5 0 0 1 -2,4l-3,2l-3,-2a5,5 0 0 1 -2,-4V3a1,1 0 0 1 1,-1zm0,18v-2a5,5 0 0 1 2,-4l3,-2l3,2a5,5 0 0 1 2,4v2a1,1 0 0 1 -1,1H7a1,1 0 0 1 -1,-1zm2,0h8v-2a3,3 0 0 0 -1.2,-2.4l-2.8,-1.6l-2.8,1.6A3,3 0 0 0 8,18v2z"/>
-</vector> 
+</vector>

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        android:title="Add Class Instance"
+        android:title="Edit Class Instance"
         android:titleTextColor="?attr/colorOnPrimary"
         app:navigationIcon="@drawable/ic_arrow_back_24"
         app:titleCentered="true"/>
@@ -44,7 +44,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Add Class Instance"
+                        android:text="Edit Class Instance"
                         android:textAppearance="?attr/textAppearanceHeadlineMedium"
                         android:textColor="?attr/colorPrimary"
                         android:layout_gravity="center_horizontal"
@@ -60,32 +60,25 @@
                         android:paddingTop="0dp"
                         android:paddingBottom="12dp"/>
 
-                    <!-- Course Selection -->
+                    <!-- Course Name (Read-only) -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilCourse"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Select Course"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        app:boxCornerRadiusTopStart="16dp"
-                        app:boxCornerRadiusTopEnd="16dp"
-                        app:boxCornerRadiusBottomStart="16dp"
-                        app:boxCornerRadiusBottomEnd="16dp"
+                        android:hint="Course Name"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         app:boxStrokeColor="?attr/colorPrimary"
                         app:hintTextColor="?attr/colorPrimary"
-                        android:layout_marginBottom="16dp"
-                        >
-                        <AutoCompleteTextView
-                            android:id="@+id/autoCourse"
+                        android:layout_marginBottom="8dp">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/tvCourseName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="none"
                             android:focusable="false"
-                            android:clickable="true"
-                            android:contentDescription="Select course for this session"
-                            android:textSize="16sp"
-                            android:paddingVertical="12dp"
-                            android:textColor="?attr/colorOnSurface"/>
+                            android:clickable="false"
+                            android:textColor="?attr/colorOnSurface"
+                            android:textAppearance="?attr/textAppearanceBodyLarge"
+                            android:contentDescription="Course name for this session"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Date -->
@@ -98,15 +91,10 @@
                         app:endIconMode="custom"
                         app:endIconDrawable="@drawable/ic_calendar"
                         app:endIconContentDescription="Pick date"
-                        app:boxCornerRadiusTopStart="16dp"
-                        app:boxCornerRadiusTopEnd="16dp"
-                        app:boxCornerRadiusBottomStart="16dp"
-                        app:boxCornerRadiusBottomEnd="16dp"
                         app:boxStrokeColor="?attr/colorPrimary"
                         app:hintTextColor="?attr/colorPrimary"
                         app:endIconTint="?attr/colorPrimary"
-                        android:layout_marginBottom="16dp"
-                        >
+                        android:layout_marginBottom="8dp">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etDate"
                             android:layout_width="match_parent"
@@ -114,79 +102,80 @@
                             android:inputType="none"
                             android:focusable="false"
                             android:clickable="true"
-                            android:contentDescription="Pick date for this session"
-                            android:textSize="16sp"
-                            android:paddingVertical="12dp"
-                            android:textColor="?attr/colorOnSurface"/>
+                            android:textColor="?attr/colorOnSurface"
+                            android:contentDescription="Pick date for this session"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Teacher Name -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilTeacher"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Teacher Name"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                        app:boxCornerRadiusTopStart="16dp"
-                        app:boxCornerRadiusTopEnd="16dp"
-                        app:boxCornerRadiusBottomStart="16dp"
-                        app:boxCornerRadiusBottomEnd="16dp"
                         app:boxStrokeColor="?attr/colorPrimary"
                         app:hintTextColor="?attr/colorPrimary"
-                        android:layout_marginBottom="16dp"
-                        >
+                        android:layout_marginBottom="8dp">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etTeacher"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textPersonName"
-                            android:contentDescription="Teacher name for this session"
-                            android:textSize="16sp"
-                            android:paddingVertical="12dp"
-                            android:textColor="?attr/colorOnSurface"/>
+                            android:textColor="?attr/colorOnSurface"
+                            android:contentDescription="Teacher name for this session"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Comments -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilComments"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Comments (Optional)"
                         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                        app:boxCornerRadiusTopStart="16dp"
-                        app:boxCornerRadiusTopEnd="16dp"
-                        app:boxCornerRadiusBottomStart="16dp"
-                        app:boxCornerRadiusBottomEnd="16dp"
                         app:boxStrokeColor="?attr/colorPrimary"
                         app:hintTextColor="?attr/colorPrimary"
-                        android:layout_marginBottom="16dp"
-                        >
+                        android:layout_marginBottom="8dp">
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etComments"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="textMultiLine"
                             android:minLines="3"
-                            android:contentDescription="Comments for this session (optional)"
-                            android:textSize="16sp"
-                            android:paddingVertical="12dp"
-                            android:textColor="?attr/colorOnSurface"/>
+                            android:textColor="?attr/colorOnSurface"
+                            android:contentDescription="Comments for this session (optional)"/>
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Submit Button -->
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSubmit"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Add Instance"
-                        style="@style/Widget.Material3.Button"
-                        app:backgroundTint="?attr/colorPrimary"
-                        app:cornerRadius="12dp"
-                        android:textColor="?attr/colorOnPrimary"
-                        android:layout_marginTop="24dp"
-                        android:contentDescription="Add this class instance"
-                        android:paddingVertical="12dp"
-                        android:textSize="18sp"/>
+                        android:orientation="horizontal"
+                        android:layout_marginTop="24dp">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnUpdateInstance"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Update Instance"
+                            style="@style/Widget.Material3.Button.OutlinedButton"
+                            app:strokeColor="?attr/colorPrimary"
+                            app:strokeWidth="2dp"
+                            app:cornerRadius="12dp"
+                            android:textColor="?attr/colorPrimary"
+                            android:layout_marginEnd="8dp"
+                            android:contentDescription="Update this class instance"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnDeleteInstance"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Delete Instance"
+                            style="@style/Widget.Material3.Button"
+                            app:backgroundTint="?attr/colorError"
+                            app:cornerRadius="12dp"
+                            android:textColor="?attr/colorOnError"
+                            android:contentDescription="Delete this class instance"/>
+                    </LinearLayout>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

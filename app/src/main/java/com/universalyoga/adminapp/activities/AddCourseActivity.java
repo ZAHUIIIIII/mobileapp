@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.TimePicker;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
@@ -35,13 +38,13 @@ public class AddCourseActivity extends AppCompatActivity {
 
     private EditText courseName, price, capacity, description, duration;
     private EditText time;
-    private boolean[] selectedDays = new boolean[7];
-    private static final String[] DAYS = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+    private String selectedDay = ""; // Changed to single String
+    private static final String[] DAYS = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     private CourseDao courseDao;
     protected TextInputLayout tilCourseName, tilTime, tilCapacity, tilDuration, tilPrice, tilType, tilDescription, tilRoomLocation;
     private MaterialAutoCompleteTextView autoType, autoRoomLocation;
     private View progressBar;
-    private EditText editDaysOfWeek;
+    private TextView selectedDaysText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +63,7 @@ public class AddCourseActivity extends AppCompatActivity {
         autoType = findViewById(R.id.autoType);
         description = findViewById(R.id.editDescription);
         autoRoomLocation = findViewById(R.id.autoRoomLocation);
-        editDaysOfWeek = findViewById(R.id.editDaysOfWeek);
+        selectedDaysText = findViewById(R.id.selectedDaysText);
         progressBar = findViewById(R.id.progressBar);
 
         tilCourseName = findViewById(R.id.tilCourseName);
@@ -78,9 +81,7 @@ public class AddCourseActivity extends AppCompatActivity {
         addClearErrorOnInput(duration, tilDuration);
         addClearErrorOnInput(price, tilPrice);
         addClearErrorOnInput(description, tilDescription);
-        addClearErrorOnInput(editDaysOfWeek, null); // No specific TextInputLayout for days of week
 
-        // Add error-clearing for dropdowns
         autoType.setOnItemClickListener((parent, view, position, id) -> tilType.setError(null));
         autoRoomLocation.setOnItemClickListener((parent, view, position, id) -> tilRoomLocation.setError(null));
 
@@ -91,19 +92,17 @@ public class AddCourseActivity extends AppCompatActivity {
         btnSave.setOnClickListener(v -> handleSave());
         btnCancel.setOnClickListener(v -> finish());
 
-        // Date, time, duration pickers (unchanged)
         time.setOnClickListener(v -> showTimePicker());
         time.setFocusable(false);
         time.setClickable(true);
         duration.setOnClickListener(v -> showDurationPicker());
         duration.setFocusable(false);
         duration.setClickable(true);
-        editDaysOfWeek.setOnClickListener(v -> showDaysOfWeekDialog());
-        editDaysOfWeek.setFocusable(false);
-        editDaysOfWeek.setClickable(true);
 
-        // Set up dropdowns
-        String[] types = {"Hatha", "Vinyasa", "Yin", "Restorative", "Ashtanga", "Kundalini", "Power", "Other"};
+        MaterialButton btnSelectDays = findViewById(R.id.btnSelectDays);
+        btnSelectDays.setOnClickListener(v -> showDaysOfWeekDialog());
+
+        String[] types = {"Flow Yoga", "Aerial Yoga", "Family Yoga", "Other"};
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, types);
         autoType.setAdapter(typeAdapter);
 
@@ -159,31 +158,43 @@ public class AddCourseActivity extends AppCompatActivity {
             calendar.setTimeInMillis(selection);
             SimpleDateFormat fullFormat = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
             String fullDate = fullFormat.format(calendar.getTime());
-            // fullSelectedDate = fullDate; // Removed
-            // editDate.setText(fullDate); // Removed
         });
         datePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
     }
 
     private void showDaysOfWeekDialog() {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        builder.setTitle("Select Days of Week");
-        builder.setMultiChoiceItems(DAYS, selectedDays, (dialog, which, isChecked) -> selectedDays[which] = isChecked);
-        builder.setPositiveButton("OK", (dialog, which) -> {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < DAYS.length; i++) {
-                if (selectedDays[i]) {
-                    if (sb.length() > 0) sb.append(",");
-                    sb.append(DAYS[i]);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_days_of_week, null);
+        builder.setView(view);
+
+        ChipGroup chipGroup = view.findViewById(R.id.chipGroupDays);
+
+        final AlertDialog dialog = builder.create();
+
+        // Pre-select the current day if it exists and set click listeners
+        for (int i = 0; i < DAYS.length; i++) {
+            Chip chip = (Chip) chipGroup.getChildAt(i);
+            if (chip != null) {
+                if (DAYS[i].equals(selectedDay)) {
+                    chip.setChecked(true);
                 }
+                chip.setOnClickListener(v -> {
+                    // Uncheck all other chips
+                    for (int j = 0; j < chipGroup.getChildCount(); j++) {
+                        Chip otherChip = (Chip) chipGroup.getChildAt(j);
+                        if (otherChip != chip) {
+                            otherChip.setChecked(false);
+                        }
+                    }
+                    // Set the clicked chip as checked
+                    chip.setChecked(true);
+                    selectedDay = chip.getText().toString();
+                    selectedDaysText.setText(selectedDay);
+                    dialog.dismiss(); // Dismiss dialog after selection
+                });
             }
-            editDaysOfWeek.setText(sb.toString());
-            Toast.makeText(this, "Selected: " + sb.toString(), Toast.LENGTH_SHORT).show();
-        });
-        builder.setNegativeButton("Cancel", null);
-        android.app.AlertDialog dialog = builder.create();
-        dialog.setCancelable(false);
-        dialog.setCanceledOnTouchOutside(false);
+        }
+
         dialog.show();
     }
 
@@ -200,7 +211,6 @@ public class AddCourseActivity extends AppCompatActivity {
             }
             Intent intent = new Intent(this, ConfirmCourseActivity.class);
             intent.putExtra("courseName", courseName.getText().toString().trim());
-            // intent.putExtra("date", fullSelectedDate); // Removed
             intent.putExtra("time", time.getText().toString().trim());
             intent.putExtra("capacity", capacity.getText().toString().trim());
             intent.putExtra("duration", durationValue);
@@ -208,7 +218,7 @@ public class AddCourseActivity extends AppCompatActivity {
             intent.putExtra("type", autoType.getText().toString().trim());
             intent.putExtra("description", description.getText().toString().trim());
             intent.putExtra("roomLocation", autoRoomLocation.getText().toString().trim());
-            intent.putExtra("daysOfWeek", editDaysOfWeek.getText().toString().trim());
+            intent.putExtra("daysOfWeek", selectedDay);
             progressBar.postDelayed(() -> {
                 progressBar.setVisibility(View.GONE);
                 startActivity(intent);
@@ -221,57 +231,56 @@ public class AddCourseActivity extends AppCompatActivity {
 
     protected boolean validateInputs() {
         if (ValidationUtils.isEmpty(courseName)) {
-            Toast.makeText(this, "Course name is required", Toast.LENGTH_SHORT).show();
+            tilCourseName.setError("Course name is required");
             courseName.requestFocus();
             return false;
         }
-        if (editDaysOfWeek.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "Please select at least one day of the week.", Toast.LENGTH_SHORT).show();
-            editDaysOfWeek.requestFocus();
+        if (selectedDay.isEmpty()) {
+            Snackbar.make(findViewById(android.R.id.content), "Please select a day of the week.", Snackbar.LENGTH_SHORT).show();
             return false;
         }
         if (ValidationUtils.isEmpty(time)) {
-            Toast.makeText(this, "Time is required", Toast.LENGTH_SHORT).show();
+            tilTime.setError("Time is required");
             time.requestFocus();
             return false;
         }
         if (ValidationUtils.isEmpty(duration)) {
-            Toast.makeText(this, "Duration is required", Toast.LENGTH_SHORT).show();
+            tilDuration.setError("Duration is required");
             duration.requestFocus();
             return false;
         }
         if (autoType.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "Type is required", Toast.LENGTH_SHORT).show();
+            tilType.setError("Type is required");
             autoType.requestFocus();
             return false;
         }
         if (ValidationUtils.isEmpty(capacity)) {
-            Toast.makeText(this, "Capacity is required", Toast.LENGTH_SHORT).show();
+            tilCapacity.setError("Capacity is required");
             capacity.requestFocus();
             return false;
         }
         if (autoRoomLocation.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "Room location is required", Toast.LENGTH_SHORT).show();
+            tilRoomLocation.setError("Room location is required");
             autoRoomLocation.requestFocus();
             return false;
         }
         if (ValidationUtils.isEmpty(price)) {
-            Toast.makeText(this, "Price is required", Toast.LENGTH_SHORT).show();
+            tilPrice.setError("Price is required");
             price.requestFocus();
             return false;
         }
         if (!ValidationUtils.isValidNumber(capacity)) {
-            Toast.makeText(this, "Capacity must be a valid number", Toast.LENGTH_SHORT).show();
+            tilCapacity.setError("Capacity must be a valid number");
             capacity.requestFocus();
             return false;
         }
         if (!isValidDuration(duration)) {
-            Toast.makeText(this, "Duration must be 1-60", Toast.LENGTH_SHORT).show();
+            tilDuration.setError("Duration must be 1-60");
             duration.requestFocus();
             return false;
         }
         if (!ValidationUtils.isValidNumber(price)) {
-            Toast.makeText(this, "Price must be a valid number", Toast.LENGTH_SHORT).show();
+            tilPrice.setError("Price must be a valid number");
             price.requestFocus();
             return false;
         }

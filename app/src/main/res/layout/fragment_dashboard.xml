@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="@color/md_theme_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,17 +15,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Welcome to Yoga Admin"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimary"
+            android:textAppearance="?attr/textAppearanceHeadlineLarge"
+            android:textColor="?attr/colorPrimary"
             android:layout_marginBottom="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Manage your yoga courses and classes"
+            android:text="Manage your yoga courses and classes with ease."
             android:textSize="16sp"
-            android:textColor="@color/colorTextSecondary"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:layout_marginBottom="24dp"/>
 
         <!-- Stats Cards -->
@@ -42,8 +41,13 @@
                 android:layout_marginEnd="8dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
-                app:strokeColor="@color/colorPrimary"
-                app:strokeWidth="1dp">
+                app:strokeColor="?attr/colorPrimary"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:contentDescription="Total courses summary card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -53,27 +57,27 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
                         android:src="@drawable/ic_courses"
-                        app:tint="@color/colorPrimary"/>
+                        app:tint="?attr/colorPrimary"
+                        android:contentDescription="Courses icon"/>
 
                     <TextView
                         android:id="@+id/tvTotalCourses"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorPrimary"
-                        android:layout_marginTop="8dp"/>
+                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                        android:textColor="?attr/colorPrimary"
+                        android:layout_marginTop="12dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Total Courses"
-                        android:textSize="14sp"
-                        android:textColor="@color/colorTextSecondary"/>
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textColor="?attr/colorOnSurfaceVariant"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -84,8 +88,13 @@
                 android:layout_marginStart="8dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="4dp"
-                app:strokeColor="@color/colorSecondary"
-                app:strokeWidth="1dp">
+                app:strokeColor="?attr/colorSecondary"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:contentDescription="Total instances summary card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -95,27 +104,27 @@
                     android:gravity="center">
 
                     <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
                         android:src="@drawable/ic_instances"
-                        app:tint="@color/colorSecondary"/>
+                        app:tint="?attr/colorSecondary"
+                        android:contentDescription="Instances icon"/>
 
                     <TextView
                         android:id="@+id/tvTotalInstances"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorSecondary"
-                        android:layout_marginTop="8dp"/>
+                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
+                        android:textColor="?attr/colorSecondary"
+                        android:layout_marginTop="12dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Total Instances"
-                        android:textSize="14sp"
-                        android:textColor="@color/colorTextSecondary"/>
+                        android:textAppearance="?attr/textAppearanceBodyMedium"
+                        android:textColor="?attr/colorOnSurfaceVariant"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
@@ -125,9 +134,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Quick Actions"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorAccent"
+            android:textAppearance="?attr/textAppearanceTitleMedium"
+            android:textColor="?attr/colorOnSurface"
             android:layout_marginBottom="16dp"/>
 
         <LinearLayout
@@ -142,8 +150,13 @@
                 android:layout_marginBottom="12dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
-                app:strokeColor="@color/colorPrimary"
-                app:strokeWidth="1dp">
+                app:strokeColor="?attr/colorPrimary"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:contentDescription="Add new course action card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -153,20 +166,20 @@
                     android:gravity="center_vertical">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/ic_add"
-                        app:tint="@color/colorPrimary"/>
+                        app:tint="?attr/colorPrimary"
+                        android:contentDescription="Add icon"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Add New Course"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorTextPrimary"
-                        android:layout_marginStart="12dp"/>
+                        android:textAppearance="?attr/textAppearanceTitleSmall"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginStart="16dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -177,8 +190,13 @@
                 android:layout_marginBottom="12dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
-                app:strokeColor="@color/colorSecondary"
-                app:strokeWidth="1dp">
+                app:strokeColor="?attr/colorSecondary"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:contentDescription="Add class instance action card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -188,20 +206,20 @@
                     android:gravity="center_vertical">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/ic_add"
-                        app:tint="@color/colorSecondary"/>
+                        app:tint="?attr/colorSecondary"
+                        android:contentDescription="Add icon"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Add Class Instance"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorTextPrimary"
-                        android:layout_marginStart="12dp"/>
+                        android:textAppearance="?attr/textAppearanceTitleSmall"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginStart="16dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -212,8 +230,13 @@
                 android:layout_marginBottom="12dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
-                app:strokeColor="@color/colorPrimary"
-                app:strokeWidth="1dp">
+                app:strokeColor="?attr/colorPrimary"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:contentDescription="View all courses action card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -223,20 +246,20 @@
                     android:gravity="center_vertical">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/ic_courses"
-                        app:tint="@color/colorPrimary"/>
+                        app:tint="?attr/colorPrimary"
+                        android:contentDescription="Courses icon"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="View All Courses"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorTextPrimary"
-                        android:layout_marginStart="12dp"/>
+                        android:textAppearance="?attr/textAppearanceTitleSmall"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginStart="16dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
@@ -247,8 +270,13 @@
                 android:layout_marginBottom="12dp"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="2dp"
-                app:strokeColor="@color/colorSecondary"
-                app:strokeWidth="1dp">
+                app:strokeColor="?attr/colorSecondary"
+                app:strokeWidth="1dp"
+                app:cardBackgroundColor="?attr/colorSurface"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                android:contentDescription="View all instances action card">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -258,22 +286,22 @@
                     android:gravity="center_vertical">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
                         android:src="@drawable/ic_instances"
-                        app:tint="@color/colorSecondary"/>
+                        app:tint="?attr/colorSecondary"
+                        android:contentDescription="Instances icon"/>
 
                     <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="View All Instances"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/colorTextPrimary"
-                        android:layout_marginStart="12dp"/>
+                        android:textAppearance="?attr/textAppearanceTitleSmall"
+                        android:textColor="?attr/colorOnSurface"
+                        android:layout_marginStart="16dp"/>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </LinearLayout>
-</ScrollView> 
+</ScrollView>

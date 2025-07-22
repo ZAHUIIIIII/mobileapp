@@ -79,4 +79,9 @@ public class YogaCourse {
     public void setRoomLocation(String roomLocation) { this.roomLocation = roomLocation; }
     public int getSyncStatus() { return syncStatus; }
     public void setSyncStatus(int syncStatus) { this.syncStatus = syncStatus; }
+
+    @Override
+    public String toString() {
+        return courseName + " (" + daysOfWeek + ")";
+    }
 } 

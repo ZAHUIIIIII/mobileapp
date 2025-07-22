@@ -40,7 +40,7 @@ public class ConfirmCourseActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.tvSummaryTime)).setText(time);
         ((TextView)findViewById(R.id.tvSummaryCapacity)).setText(String.valueOf(capacity));
         ((TextView)findViewById(R.id.tvSummaryDuration)).setText(duration + " min");
-        ((TextView)findViewById(R.id.tvSummaryPrice)).setText("$" + String.format("%.2f", price));
+        ((TextView)findViewById(R.id.tvSummaryPrice)).setText("£" + String.format("%.2f", price));
         ((TextView)findViewById(R.id.tvSummaryType)).setText(type);
         ((TextView)findViewById(R.id.tvSummaryDescription)).setText(description);
         ((TextView)findViewById(R.id.tvSummaryRoomLocation)).setText(roomLocation);

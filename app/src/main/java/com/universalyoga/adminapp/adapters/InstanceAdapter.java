@@ -9,16 +9,19 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.universalyoga.adminapp.R;
 import com.universalyoga.adminapp.models.YogaInstance;
 import java.util.List;
+import com.google.android.material.button.MaterialButton;
 
 public class InstanceAdapter extends RecyclerView.Adapter<InstanceAdapter.ViewHolder> {
     private List<YogaInstance> instances;
-    private OnInstanceClickListener listener;
+    private OnInstanceActionListener listener;
     
-    public interface OnInstanceClickListener {
+    public interface OnInstanceActionListener {
         void onInstanceClick(YogaInstance instance);
+        void onEditClick(YogaInstance instance);
+        void onDeleteClick(YogaInstance instance);
     }
     
-    public InstanceAdapter(List<YogaInstance> instances, OnInstanceClickListener listener) {
+    public InstanceAdapter(List<YogaInstance> instances, OnInstanceActionListener listener) {
         this.instances = instances;
         this.listener = listener;
     }
@@ -49,17 +52,34 @@ public class InstanceAdapter extends RecyclerView.Adapter<InstanceAdapter.ViewHo
     
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvDate, tvTeacher, tvComments;
+        private MaterialButton btnEditInstance, btnDeleteInstance;
         
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvDate = itemView.findViewById(R.id.tvDate);
             tvTeacher = itemView.findViewById(R.id.tvTeacher);
             tvComments = itemView.findViewById(R.id.tvComments);
+            btnEditInstance = itemView.findViewById(R.id.btnEditInstance);
+            btnDeleteInstance = itemView.findViewById(R.id.btnDeleteInstance);
             
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && listener != null) {
                     listener.onInstanceClick(instances.get(position));
+                }
+            });
+
+            btnEditInstance.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onEditClick(instances.get(position));
+                }
+            });
+
+            btnDeleteInstance.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onDeleteClick(instances.get(position));
                 }
             });
         }

@@ -21,4 +21,10 @@ public interface CourseDao {
     List<YogaCourse> getAll();
     @Query("SELECT * FROM courses WHERE id = :id LIMIT 1")
     YogaCourse getById(int id);
+
+    @Query("SELECT * FROM courses WHERE " +
+           "courseName LIKE :query OR " +
+           "daysOfWeek LIKE :query OR " +
+           "id IN (SELECT courseId FROM instances WHERE teacher LIKE :query OR date LIKE :query)")
+    List<YogaCourse> searchCourses(String query);
 } 

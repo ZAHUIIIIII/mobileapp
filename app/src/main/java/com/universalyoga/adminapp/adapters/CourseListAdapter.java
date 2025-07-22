@@ -49,7 +49,7 @@ public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.VH
         h.tvCourseTitle.setText(c.getCourseName());
         h.tvCourseSchedule.setText(c.getDate() + " @ " + c.getTime() + " • " + c.getDuration() + " min • " + c.getCapacity() + " people");
         h.tvCourseType.setText(c.getType());
-        h.tvCoursePrice.setText("$" + String.format("%.2f", c.getPrice()));
+        h.tvCoursePrice.setText(String.format("£%.2f", c.getPrice()));
         h.tvCourseDescription.setText(c.getDescription());
         if (selectMode) {
             h.checkBox.setVisibility(View.VISIBLE);

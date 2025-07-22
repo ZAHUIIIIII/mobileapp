@@ -20,7 +20,9 @@ public interface InstanceDao {
     @Query("SELECT * FROM instances ORDER BY id DESC")
     List<YogaInstance> getAll();
     @Query("SELECT * FROM instances WHERE courseId = :courseId")
-    List<YogaInstance> getByCourse(int courseId);
+    LiveData<List<YogaInstance>> getByCourse(int courseId);
+    @Query("SELECT * FROM instances WHERE courseId = :courseId")
+    List<YogaInstance> getInstancesByCourseSync(int courseId);
     @Query("SELECT * FROM instances WHERE id = :id LIMIT 1")
     YogaInstance getById(int id);
-} 
+}

@@ -5,6 +5,7 @@
     android:viewportWidth="24"
     android:viewportHeight="24">
     <path
-        android:fillColor="#009688"
+        android:name="capacity_path"
+        android:fillColor="@color/md_theme_onSurface"
         android:pathData="M12,12a3,3 0 1 0 0,-6a3,3 0 0 0 0,6zm6,2c1.66,0 3,1.34 3,3v3h-2v-3c0,-0.55 -0.45,-1 -1,-1h-2c-0.55,0 -1,0.45 -1,1v3h-2v-3c0,-1.66 1.34,-3 3,-3zm-12,0c1.66,0 3,1.34 3,3v3H7v-3c0,-0.55 -0.45,-1 -1,-1H4c-0.55,0 -1,0.45 -1,1v3H1v-3c0,-1.66 1.34,-3 3,-3z"/>
-</vector> 
+</vector>

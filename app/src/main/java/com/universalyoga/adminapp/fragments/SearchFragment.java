@@ -52,39 +52,9 @@ public class SearchFragment extends Fragment {
             Toast.makeText(requireContext(), "Please enter a search term", Toast.LENGTH_SHORT).show();
             return;
         }
+        final String searchQuery = "%" + query + "%";
         new Thread(() -> {
-            List<YogaCourse> results = new ArrayList<>();
-            List<YogaCourse> allCourses = courseDao.getAll();
-            // Search by teacher name (in instances)
-            for (YogaCourse course : allCourses) {
-                List<YogaInstance> instances = instanceDao.getByCourse(course.getId());
-                for (YogaInstance instance : instances) {
-                    if (instance.getTeacher().toLowerCase().contains(query.toLowerCase())) {
-                        if (!results.contains(course)) {
-                            results.add(course);
-                        }
-                    }
-                }
-            }
-            // Search by day of the week
-            for (YogaCourse course : allCourses) {
-                if (course.getDate().toLowerCase().contains(query.toLowerCase())) {
-                    if (!results.contains(course)) {
-                        results.add(course);
-                    }
-                }
-            }
-            // Search by date (in instances)
-            for (YogaCourse course : allCourses) {
-                List<YogaInstance> instances = instanceDao.getByCourse(course.getId());
-                for (YogaInstance instance : instances) {
-                    if (instance.getDate().contains(query)) {
-                        if (!results.contains(course)) {
-                            results.add(course);
-                        }
-                    }
-                }
-            }
+            List<YogaCourse> results = courseDao.searchCourses(searchQuery);
             requireActivity().runOnUiThread(() -> {
                 if (results.isEmpty()) {
                     Toast.makeText(requireContext(), "No courses found", Toast.LENGTH_SHORT).show();
@@ -100,4 +70,4 @@ public class SearchFragment extends Fragment {
             });
         }).start();
     }
-} 
+}

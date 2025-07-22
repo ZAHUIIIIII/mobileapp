@@ -49,11 +49,12 @@ public class SearchActivity extends AppCompatActivity {
         new Thread(() -> {
             List<YogaCourse> results = new ArrayList<>();
             List<YogaCourse> allCourses = courseDao.getAll();
+            List<YogaInstance> allInstances = instanceDao.getAll(); // Get all instances once
+
             // Search by teacher name (in instances)
             for (YogaCourse course : allCourses) {
-                List<YogaInstance> instances = instanceDao.getByCourse(course.getId());
-                for (YogaInstance instance : instances) {
-                    if (instance.getTeacher().toLowerCase().contains(query.toLowerCase())) {
+                for (YogaInstance instance : allInstances) {
+                    if (instance.getCourseId() == course.getId() && instance.getTeacher().toLowerCase().contains(query.toLowerCase())) {
                         if (!results.contains(course)) {
                             results.add(course);
                         }
@@ -62,7 +63,7 @@ public class SearchActivity extends AppCompatActivity {
             }
             // Search by day of the week
             for (YogaCourse course : allCourses) {
-                if (course.getDate().toLowerCase().contains(query.toLowerCase())) {
+                if (course.getDaysOfWeek().toLowerCase().contains(query.toLowerCase())) {
                     if (!results.contains(course)) {
                         results.add(course);
                     }
@@ -70,9 +71,8 @@ public class SearchActivity extends AppCompatActivity {
             }
             // Search by date (in instances)
             for (YogaCourse course : allCourses) {
-                List<YogaInstance> instances = instanceDao.getByCourse(course.getId());
-                for (YogaInstance instance : instances) {
-                    if (instance.getDate().contains(query)) {
+                for (YogaInstance instance : allInstances) {
+                    if (instance.getCourseId() == course.getId() && instance.getDate().contains(query)) {
                         if (!results.contains(course)) {
                             results.add(course);
                         }

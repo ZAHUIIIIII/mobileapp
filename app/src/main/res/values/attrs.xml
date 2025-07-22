@@ -1,0 +1,14 @@
+<resources>
+    <declare-styleable name="ChipGroup">
+        <attr name="selectionMode" format="enum">
+            <enum name="none" value="0" />
+            <enum name="single" value="1" />
+            <enum name="multiple" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <attr name="colorShadow" format="color" />
+    <attr name="colorInverseSurface" format="color" />
+    <attr name="colorInverseOnSurface" format="color" />
+    <attr name="colorInversePrimary" format="color" />
+</resources>

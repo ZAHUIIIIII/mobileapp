@@ -6,8 +6,10 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp"
-    app:strokeColor="@color/colorAccent"
-    app:strokeWidth="1dp">
+    app:cardBackgroundColor="?attr/colorSurface"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="?attr/selectableItemBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,18 +26,17 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@android:drawable/ic_menu_my_calendar"
+                android:src="@drawable/ic_calendar"
                 android:contentDescription="Session day icon"
-                app:tint="@color/colorPrimary"
+                app:tint="?attr/colorPrimary"
                 android:layout_marginEnd="8dp"/>
             <TextView
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Date"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimary"/>
+                android:textAppearance="?attr/textAppearanceTitleMedium"
+                android:textColor="?attr/colorPrimary"/>
         </LinearLayout>
 
         <LinearLayout
@@ -47,17 +48,17 @@
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@android:drawable/ic_menu_info_details"
+                android:src="@drawable/ic_teacher"
                 android:contentDescription="Teacher icon"
-                app:tint="@color/colorSecondary"
+                app:tint="?attr/colorSecondary"
                 android:layout_marginEnd="8dp"/>
             <TextView
                 android:id="@+id/tvTeacher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Teacher"
-                android:textSize="16sp"
-                android:textColor="@color/colorSecondary"/>
+                android:textAppearance="?attr/textAppearanceBodyLarge"
+                android:textColor="?attr/colorOnSurface"/>
         </LinearLayout>
 
         <TextView
@@ -65,9 +66,35 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Comments"
-            android:textSize="14sp"
-            android:textColor="@color/colorTextSecondary"
+            android:textAppearance="?attr/textAppearanceBodyMedium"
+            android:textColor="?attr/colorOnSurfaceVariant"
             android:layout_marginTop="8dp"
             android:contentDescription="Session comments"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp"
+            android:gravity="end">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEditInstance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Edit"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:textColor="?attr/colorPrimary"
+                android:layout_marginEnd="8dp"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDeleteInstance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Delete"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:textColor="?attr/colorError"/>
+        </LinearLayout>
+
     </LinearLayout>
-</com.google.android.material.card.MaterialCardView> 
+</com.google.android.material.card.MaterialCardView>
