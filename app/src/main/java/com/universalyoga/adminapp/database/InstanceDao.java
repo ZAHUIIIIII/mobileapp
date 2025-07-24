@@ -25,4 +25,7 @@ public interface InstanceDao {
     List<YogaInstance> getInstancesByCourseSync(int courseId);
     @Query("SELECT * FROM instances WHERE id = :id LIMIT 1")
     YogaInstance getById(int id);
+
+    @Query("SELECT * FROM instances WHERE teacher LIKE :query OR date LIKE :query")
+    List<YogaInstance> searchInstances(String query);
 }

@@ -30,8 +30,9 @@
         android:layout_gravity="bottom"
         android:background="?attr/colorSurface"
         app:elevation="8dp"
-        app:itemIconTint="?attr/colorPrimary"
-        app:itemTextColor="?attr/colorPrimary"
+        app:itemIconTint="@drawable/bottom_nav_selector"
+        app:itemTextColor="@drawable/bottom_nav_selector"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/bottom_navigation_menu"
         android:contentDescription="Main navigation bar"/>
 

@@ -1,4 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">YogaCourse</string>
-    <string name="prompt_type">Type</string>
+    <string-array name="search_by_options">
+        <item>Search by Teacher</item>
+        <item>Search by Instance</item>
+        <item>Search by Type</item>
+    </string-array>
 </resources>

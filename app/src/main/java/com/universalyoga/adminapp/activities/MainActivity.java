@@ -10,7 +10,6 @@ import com.universalyoga.adminapp.R;
 import com.universalyoga.adminapp.fragments.CoursesFragment;
 import com.universalyoga.adminapp.fragments.DashboardFragment;
 import com.universalyoga.adminapp.fragments.InstancesFragment;
-import com.universalyoga.adminapp.fragments.SearchFragment;
 import com.universalyoga.adminapp.fragments.UploadFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -32,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
                 selectedFragment = new CoursesFragment();
             } else if (itemId == R.id.nav_instances) {
                 selectedFragment = new InstancesFragment();
-            } else if (itemId == R.id.nav_search) {
-                selectedFragment = new SearchFragment();
             } else if (itemId == R.id.nav_upload) {
                 selectedFragment = new UploadFragment();
             }

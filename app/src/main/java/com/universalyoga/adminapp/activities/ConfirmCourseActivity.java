@@ -54,21 +54,13 @@ public class ConfirmCourseActivity extends AppCompatActivity {
             new Thread(() -> {
                 try {
                     AppDatabase.getInstance(this).courseDao().insert(course);
+                    com.universalyoga.adminapp.utils.ToastHelper.pendingToastMessage = "Course added successfully!";
                     runOnUiThread(() -> {
                         progressBar.setVisibility(View.GONE);
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Course added!", Snackbar.LENGTH_SHORT)
-                            .setAction("View", v2 -> {
-                                finish();
-                            });
-                        snackbar.addCallback(new com.google.android.material.snackbar.BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                            @Override
-                            public void onDismissed(Snackbar transientBottomBar, int event) {
-                                Intent intent = new Intent(ConfirmCourseActivity.this, MainActivity.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                                startActivity(intent);
-                            }
-                        });
-                        snackbar.show();
+                        Intent intent = new Intent(ConfirmCourseActivity.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                        finish();
                     });
                 } catch (Exception e) {
                     runOnUiThread(() -> {

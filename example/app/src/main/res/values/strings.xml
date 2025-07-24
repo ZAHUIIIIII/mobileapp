@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Yoga Admin</string>
+    
+    <!-- Navigation -->
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_classes">Classes</string>
+    <string name="nav_instances">Instances</string>
+    <string name="nav_sync">Sync</string>
+    
+    <!-- Dashboard -->
+    <string name="welcome_back">Welcome Back!</string>
+    <string name="dashboard_subtitle">Here\'s what\'s happening with your yoga studio</string>
+    <string name="total_classes">Total Classes</string>
+    <string name="total_instances">Instances</string>
+    <string name="total_capacity">Total Capacity</string>
+    <string name="avg_price">Avg. Price</string>
+    <string name="quick_actions">Quick Actions</string>
+    <string name="recent_activity">Recent Activity</string>
+    <string name="no_recent_activity">No recent activity</string>
+    
+    <!-- Classes -->
+    <string name="add_class">Add Class</string>
+    <string name="create_first_class">Create First Class</string>
+    <string name="no_classes_yet">No Classes Yet</string>
+    <string name="classes_empty_description">Get started by creating your first yoga class. You can add schedules, set capacity, and manage everything from here.</string>
+    <string name="search_classes_hint">Search classes, instructors, locations...</string>
+    <string name="advanced_filters">Advanced Filters</string>
+    <string name="filter_by_day">Filter by day</string>
+    <string name="filter_by_type">Filter by type</string>
+    <string name="filter_by_difficulty">Filter by difficulty</string>
+    <string name="clear_filters">Clear Filters</string>
+    <string name="no_results_found">No Results Found</string>
+    <string name="adjust_search_criteria">Try adjusting your search criteria</string>
+    
+    <!-- Class Details -->
+    <string name="capacity_format">Capacity: %d</string>
+    <string name="instructor_format">Instructor: %s</string>
+    <string name="instances_button">Instances</string>
+    <string name="edit_button">Edit</string>
+    <string name="delete_button">Delete</string>
+    <string name="duration_format">%d min</string>
+    <string name="price_format">£%.0f</string>
+    
+    <!-- Cloud Sync -->
+    <string name="cloud_sync">Cloud Sync</string>
+    <string name="sync_subtitle">Keep your data synchronized across devices</string>
+    <string name="network_status">Network Status</string>
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
+    <string name="ready_to_sync">Ready to sync</string>
+    <string name="connect_to_internet">Connect to internet to sync</string>
+    <string name="syncing">Syncing...</string>
+    <string name="sync_now">Sync Now</string>
+    <string name="auto_sync">Auto Sync</string>
+    <string name="auto_sync_description">Automatically sync when online</string>
+    <string name="cancel_sync">Cancel</string>
+    <string name="progress">Progress</string>
+    <string name="records">Records</string>
+    <string name="successful">Successful</string>
+    <string name="pending_format">%d pending</string>
+    <string name="failed_format">%d failed</string>
+    <string name="records_processed_format">%d / %d records processed</string>
+    <string name="last_sync_error">Last sync error:</string>
+    
+    <!-- General -->
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="add">Add</string>
+    <string name="search">Search</string>
+    <string name="filter">Filter</string>
+    <string name="all">All</string>
+    <string name="active">Active</string>
+    
+    <!-- Days of Week -->
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="all_days">All days</string>
+    
+    <!-- Class Types -->
+    <string name="flow_yoga">Flow Yoga</string>
+    <string name="aerial_yoga">Aerial Yoga</string>
+    <string name="family_yoga">Family Yoga</string>
+    <string name="hot_yoga">Hot Yoga</string>
+    <string name="restorative_yoga">Restorative Yoga</string>
+    <string name="vinyasa_yoga">Vinyasa Yoga</string>
+    <string name="hatha_yoga">Hatha Yoga</string>
+    <string name="yin_yoga">Yin Yoga</string>
+    <string name="all_types">All types</string>
+    
+    <!-- Difficulty Levels -->
+    <string name="beginner">Beginner</string>
+    <string name="intermediate">Intermediate</string>
+    <string name="advanced">Advanced</string>
+    <string name="all_levels">All levels</string>
+    
+</resources>

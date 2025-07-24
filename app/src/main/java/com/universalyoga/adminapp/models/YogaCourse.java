@@ -82,6 +82,6 @@ public class YogaCourse {
 
     @Override
     public String toString() {
-        return courseName + " (" + daysOfWeek + ")";
+        return courseName;
     }
 } 

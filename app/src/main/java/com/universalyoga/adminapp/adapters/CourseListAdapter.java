@@ -3,88 +3,105 @@ package com.universalyoga.adminapp.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import androidx.recyclerview.widget.RecyclerView;
-import com.universalyoga.adminapp.models.YogaCourse;
-import com.universalyoga.adminapp.R;
-import java.util.List;
-import java.util.function.Consumer;
 import android.widget.CheckBox;
-import java.util.HashSet;
-import java.util.Set;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import com.universalyoga.adminapp.R;
+import com.universalyoga.adminapp.models.YogaCourse;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Locale;
 
-public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.VH> {
-    private List<YogaCourse> data;
-    private Consumer<YogaCourse> onClick;
-    private boolean selectMode = false;
-    private Set<Integer> selectedIds = new HashSet<>();
-    public CourseListAdapter(List<YogaCourse> d, Consumer<YogaCourse> cb){data=d;onClick=cb;}
-    public void setSelectMode(boolean enabled) {
-        selectMode = enabled;
-        if (!enabled) selectedIds.clear();
-        notifyDataSetChanged();
+public class CourseListAdapter extends RecyclerView.Adapter<CourseListAdapter.ViewHolder> {
+    private List<YogaCourse> courses;
+    public interface OnCourseClickListener {
+        void onCourseClick(YogaCourse course);
     }
-    public boolean isSelectMode() { return selectMode; }
-    public void toggleSelection(int id) {
-        if (selectedIds.contains(id)) selectedIds.remove(id);
-        else selectedIds.add(id);
-        notifyDataSetChanged();
+    private OnCourseClickListener listener;
+    public interface OnCourseActionListener {
+        void onEdit(YogaCourse course);
+        void onDelete(YogaCourse course);
     }
-    public void clearSelection() {
-        selectedIds.clear();
-        notifyDataSetChanged();
+    private OnCourseActionListener actionListener;
+
+    public CourseListAdapter(List<YogaCourse> courses, OnCourseClickListener listener, OnCourseActionListener actionListener) {
+        this.courses = courses;
+        this.listener = listener;
+        this.actionListener = actionListener;
     }
-    public Set<Integer> getSelectedIds() { return selectedIds; }
-    public List<YogaCourse> getSelectedCourses() {
-        List<YogaCourse> result = new java.util.ArrayList<>();
-        for (YogaCourse c : data) if (selectedIds.contains(c.getId())) result.add(c);
-        return result;
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+            .inflate(R.layout.item_course, parent, false);
+        return new ViewHolder(view);
     }
-    @Override public VH onCreateViewHolder(ViewGroup p,int i){
-        View v = LayoutInflater.from(p.getContext()).inflate(R.layout.item_course,p,false);
-        return new VH(v);
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        YogaCourse course = courses.get(position);
+        holder.bind(course, listener);
     }
-    @Override public void onBindViewHolder(VH h,int i){
-        YogaCourse c=data.get(i);
-        h.tvCourseTitle.setText(c.getCourseName());
-        h.tvCourseSchedule.setText(c.getDate() + " @ " + c.getTime() + " • " + c.getDuration() + " min • " + c.getCapacity() + " people");
-        h.tvCourseType.setText(c.getType());
-        h.tvCoursePrice.setText(String.format("£%.2f", c.getPrice()));
-        h.tvCourseDescription.setText(c.getDescription());
-        if (selectMode) {
-            h.checkBox.setVisibility(View.VISIBLE);
-            h.checkBox.setChecked(selectedIds.contains(c.getId()));
-            h.itemView.setOnClickListener(v -> toggleSelection(c.getId()));
-        } else {
-            h.checkBox.setVisibility(View.GONE);
-            h.itemView.setOnClickListener(v -> onClick.accept(c));
-        }
-        h.itemView.setOnLongClickListener(v -> {
-            if (!selectMode) {
-                setSelectMode(true);
-                toggleSelection(c.getId());
-                return true;
-            }
-            return false;
-        });
+
+    @Override
+    public int getItemCount() {
+        return courses.size();
     }
-    @Override public int getItemCount(){return data.size();}
 
     public void updateCourses(List<YogaCourse> newCourses) {
-        this.data = newCourses;
+        this.courses = newCourses;
         notifyDataSetChanged();
     }
-    static class VH extends RecyclerView.ViewHolder{
-        TextView tvCourseTitle, tvCourseSchedule, tvCourseType, tvCoursePrice, tvCourseDescription;
-        CheckBox checkBox;
-        public VH(View v){
-            super(v);
-            tvCourseTitle = v.findViewById(R.id.tvCourseTitle);
-            tvCourseSchedule = v.findViewById(R.id.tvCourseSchedule);
-            tvCourseType = v.findViewById(R.id.tvCourseType);
-            tvCoursePrice = v.findViewById(R.id.tvCoursePrice);
-            tvCourseDescription = v.findViewById(R.id.tvCourseDescription);
-            checkBox = v.findViewById(R.id.checkBoxSelect);
+
+    // Add this method to support swipe-to-delete
+    public YogaCourse getCourseAt(int position) {
+        return courses.get(position);
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView tvTitle, tvSchedule, tvType, tvPrice, tvDetails;
+        private android.widget.ImageView ivOverflowMenu;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvTitle = itemView.findViewById(R.id.tvCourseTitle);
+            tvSchedule = itemView.findViewById(R.id.tvCourseSchedule);
+            tvType = itemView.findViewById(R.id.tvCourseType);
+            tvPrice = itemView.findViewById(R.id.tvCoursePrice);
+            tvDetails = itemView.findViewById(R.id.tvCourseDetails);
+            ivOverflowMenu = itemView.findViewById(R.id.ivOverflowMenu);
+        }
+
+        public void bind(final YogaCourse course, final OnCourseClickListener listener) {
+            tvTitle.setText(course.getCourseName());
+            tvType.setText(course.getType());
+            tvPrice.setText(String.format(Locale.UK, "£%.2f", course.getPrice()));
+            tvSchedule.setText(String.format(Locale.UK, "%s @ %s", course.getDaysOfWeek(), course.getTime()));
+            tvDetails.setText(String.format(Locale.UK, "%d min • %d people", course.getDuration(), course.getCapacity()));
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onCourseClick(course);
+                }
+            });
+            ivOverflowMenu.setOnClickListener(v -> {
+                androidx.appcompat.widget.PopupMenu popup = new androidx.appcompat.widget.PopupMenu(itemView.getContext(), ivOverflowMenu);
+                popup.getMenuInflater().inflate(R.menu.menu_course_item, popup.getMenu());
+                popup.setOnMenuItemClickListener(item -> {
+                    if (item.getItemId() == R.id.action_edit) {
+                        if (actionListener != null) actionListener.onEdit(course);
+                        return true;
+                    } else if (item.getItemId() == R.id.action_delete) {
+                        if (actionListener != null) actionListener.onDelete(course);
+                        return true;
+                    }
+                    return false;
+                });
+                popup.show();
+            });
         }
     }
 }
+

@@ -87,19 +87,16 @@ public class ClassInstanceActivity extends AppCompatActivity implements Instance
         });
     }
 
-    @Override
     public void onInstanceClick(YogaInstance instance) {
         // Not implemented for now, as per requirement
     }
 
-    @Override
     public void onEditClick(YogaInstance instance) {
         Intent intent = new Intent(this, EditInstanceActivity.class);
         intent.putExtra("instanceId", instance.getId());
         startActivity(intent);
     }
 
-    @Override
     public void onDeleteClick(YogaInstance instance) {
         new AlertDialog.Builder(this)
             .setTitle("Delete Instance")

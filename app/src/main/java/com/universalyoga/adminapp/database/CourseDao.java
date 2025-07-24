@@ -22,6 +22,9 @@ public interface CourseDao {
     @Query("SELECT * FROM courses WHERE id = :id LIMIT 1")
     YogaCourse getById(int id);
 
+    @Query("SELECT * FROM courses WHERE id = :id LIMIT 1")
+    LiveData<YogaCourse> getByIdLive(int id);
+
     @Query("SELECT * FROM courses WHERE " +
            "courseName LIKE :query OR " +
            "daysOfWeek LIKE :query OR " +

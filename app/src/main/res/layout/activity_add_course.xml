@@ -44,6 +44,8 @@
                 app:cardElevation="4dp"
                 app:cardBackgroundColor="?attr/colorSurface">
 
+                `
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -54,84 +56,92 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:paddingBottom="24dp"
                         android:text="Add Yoga Course"
                         android:textAppearance="?attr/textAppearanceHeadlineMedium"
-                        android:textColor="?attr/colorPrimary"
-                        android:layout_gravity="center_horizontal"
-                        android:paddingBottom="24dp"/>
+                        android:textColor="?attr/colorPrimary" />
 
                     <!-- Course Name (moved to top) -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilCourseName"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
                         android:hint="Course Name"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusTopStart="16dp"
                         app:boxStrokeColor="?attr/colorPrimary"
                         app:boxStrokeWidth="2dp"
-                        app:boxCornerRadiusTopStart="16dp"
-                        app:boxCornerRadiusTopEnd="16dp"
-                        app:boxCornerRadiusBottomStart="16dp"
-                        app:boxCornerRadiusBottomEnd="16dp"
-                        app:hintTextColor="?attr/colorPrimary"
                         app:endIconTint="?attr/colorPrimary"
-                        android:layout_marginBottom="16dp"
-                        >
+                        app:hintTextColor="?attr/colorPrimary">
+
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editCourseName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPersonName"
                             android:autofillHints="name"
                             android:contentDescription="Course name"
-                            android:textColor="?attr/colorOnSurface"
+                            android:inputType="textPersonName"
+                            android:padding="12dp"
                             android:textAppearance="?attr/textAppearanceBodyLarge"
-                            android:padding="12dp"/>
+                            android:textColor="?attr/colorOnSurface" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Section: Schedule -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
                         android:text="Schedule"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
-                        android:textColor="?attr/colorPrimary"
-                        android:paddingTop="24dp"
-                        android:paddingBottom="12dp"/>
+                        android:textColor="?attr/colorPrimary" />
 
                     <!-- Days of Week Multi-Select -->
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnSelectDays"
-                        style="@style/Widget.Material3.Button.OutlinedButton"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilDaysOfWeek"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Select Days of the Week"
-                        android:textColor="?attr/colorPrimary"
-                        app:strokeColor="?attr/colorPrimary"
-                        app:strokeWidth="2dp"
-                        app:cornerRadius="16dp"
-                        android:layout_marginBottom="16dp"/>
+                        android:layout_marginBottom="16dp"
+                        android:hint="Days of Week"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusTopStart="16dp"
+                        app:boxStrokeColor="?attr/colorPrimary"
+                        app:boxStrokeWidth="2dp"
+                        app:endIconContentDescription="Select days of week"
+                        app:endIconDrawable="@drawable/ic_calendar"
+                        app:endIconMode="custom"
+                        app:endIconTint="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorPrimary">
 
-                    <TextView
-                        android:id="@+id/selectedDaysText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:paddingTop="4dp"
-                        android:paddingBottom="4dp"
-                        android:textColor="?attr/colorOnSurface"
-                        android:textSize="14sp"/>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etDaysOfWeek"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="false"
+                            android:inputType="none"
+                            android:padding="12dp"
+                            android:textAppearance="?attr/textAppearanceBodyLarge"
+                            android:textColor="?attr/colorOnSurface" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                    
 
                     <!-- Time and Duration on the same row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
                         android:orientation="horizontal"
-                        android:weightSum="2"
-                        android:layout_marginBottom="16dp">
+                        android:weightSum="2">
+
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilTime"
                             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -139,18 +149,18 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:hint="Time"
-                            app:endIconMode="custom"
-                            app:endIconDrawable="@drawable/ic_time"
-                            app:endIconContentDescription="Pick time"
+                            app:boxCornerRadiusBottomEnd="16dp"
+                            app:boxCornerRadiusBottomStart="16dp"
+                            app:boxCornerRadiusTopEnd="16dp"
+                            app:boxCornerRadiusTopStart="16dp"
                             app:boxStrokeColor="?attr/colorPrimary"
                             app:boxStrokeWidth="2dp"
-                            app:boxCornerRadiusTopStart="16dp"
-                            app:boxCornerRadiusTopEnd="16dp"
-                            app:boxCornerRadiusBottomStart="16dp"
-                            app:boxCornerRadiusBottomEnd="16dp"
-                            app:hintTextColor="?attr/colorPrimary"
+                            app:endIconContentDescription="Pick time"
+                            app:endIconDrawable="@drawable/ic_time"
+                            app:endIconMode="custom"
                             app:endIconTint="?attr/colorPrimary"
-                            app:helperText="Time is required">
+                            app:hintTextColor="?attr/colorPrimary">
+
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/editTime"
                                 android:layout_width="match_parent"
@@ -159,43 +169,45 @@
                                 android:contentDescription="Pick time"
                                 android:focusable="false"
                                 android:inputType="none"
-                                android:textColor="?attr/colorOnSurface"
+                                android:padding="12dp"
                                 android:textAppearance="?attr/textAppearanceBodyLarge"
-                                android:padding="12dp"/>
+                                android:textColor="?attr/colorOnSurface" />
                         </com.google.android.material.textfield.TextInputLayout>
+
                         <Space
-                            android:layout_width="8dp"
+                            android:layout_width="4dp"
                             android:layout_height="wrap_content" />
+
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilDuration"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:hint="Duration (minutes)"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                            app:endIconMode="custom"
-                            app:endIconDrawable="@drawable/ic_duration"
-                            app:endIconContentDescription="Select duration"
+                            app:boxCornerRadiusBottomEnd="16dp"
+                            app:boxCornerRadiusBottomStart="16dp"
+                            app:boxCornerRadiusTopEnd="16dp"
+                            app:boxCornerRadiusTopStart="16dp"
                             app:boxStrokeColor="?attr/colorPrimary"
                             app:boxStrokeWidth="2dp"
-                            app:boxCornerRadiusTopStart="16dp"
-                            app:boxCornerRadiusTopEnd="16dp"
-                            app:boxCornerRadiusBottomStart="16dp"
-                            app:boxCornerRadiusBottomEnd="16dp"
-                            app:hintTextColor="?attr/colorPrimary"
+                            app:endIconContentDescription="Select duration"
+                            app:endIconDrawable="@drawable/ic_duration"
+                            app:endIconMode="custom"
                             app:endIconTint="?attr/colorPrimary"
-                            app:helperText="Duration must be 1-60">
+                            app:hintTextColor="?attr/colorPrimary">
+
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/editDuration"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="none"
-                                android:focusable="false"
                                 android:clickable="true"
                                 android:contentDescription="Select duration in minutes"
-                                android:textColor="?attr/colorOnSurface"
+                                android:focusable="false"
+                                android:inputType="none"
+                                android:padding="12dp"
                                 android:textAppearance="?attr/textAppearanceBodyLarge"
-                                android:padding="12dp"/>
+                                android:textColor="?attr/colorOnSurface" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
@@ -203,51 +215,53 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingTop="2dp"
+                        android:paddingBottom="12dp"
                         android:text="Course Details"
                         android:textAppearance="?attr/textAppearanceTitleMedium"
                         android:textColor="?attr/colorPrimary"
-                        android:paddingTop="24dp"
-                        android:paddingBottom="12dp"/>
+                        android:textStyle="bold" />
 
                     <!-- Type Dropdown -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilType"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Type"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_marginBottom="16dp"
                         android:contentDescription="Yoga type"
+                        android:hint="Type"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusTopStart="16dp"
                         app:boxStrokeColor="?attr/colorPrimary"
                         app:boxStrokeWidth="2dp"
-                        app:boxCornerRadiusTopStart="16dp"
-                        app:boxCornerRadiusTopEnd="16dp"
-                        app:boxCornerRadiusBottomStart="16dp"
-                        app:boxCornerRadiusBottomEnd="16dp"
-                        app:hintTextColor="?attr/colorPrimary"
                         app:endIconTint="?attr/colorPrimary"
-                        android:layout_marginBottom="16dp"
-                        app:helperText="Type is required">
+                        app:hintTextColor="?attr/colorPrimary">
+
                         <com.google.android.material.textfield.MaterialAutoCompleteTextView
                             android:id="@+id/autoType"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:focusable="false"
                             android:clickable="true"
                             android:contentDescription="Yoga type"
-                            android:textAppearance="?attr/textAppearanceBodyLarge"
-                            android:padding="12dp"
+                            android:focusable="false"
                             android:importantForAccessibility="yes"
-                            android:textColor="?attr/colorOnSurface"/>
+                            android:inputType="none"
+                            android:padding="12dp"
+                            android:textAppearance="?attr/textAppearanceBodyLarge"
+                            android:textColor="?attr/colorOnSurface" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Capacity and Room Location on the same row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
                         android:orientation="horizontal"
-                        android:weightSum="2"
-                        android:layout_marginBottom="16dp">
+                        android:weightSum="2">
+
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilCapacity"
                             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
@@ -255,49 +269,50 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:hint="Capacity"
-                            app:endIconMode="custom"
-                            app:endIconDrawable="@drawable/ic_capacity"
-                            app:endIconContentDescription="Select capacity"
+                            app:boxCornerRadiusBottomEnd="16dp"
+                            app:boxCornerRadiusBottomStart="16dp"
+                            app:boxCornerRadiusTopEnd="16dp"
+                            app:boxCornerRadiusTopStart="16dp"
                             app:boxStrokeColor="?attr/colorPrimary"
                             app:boxStrokeWidth="2dp"
-                            app:boxCornerRadiusTopStart="16dp"
-                            app:boxCornerRadiusTopEnd="16dp"
-                            app:boxCornerRadiusBottomStart="16dp"
-                            app:boxCornerRadiusBottomEnd="16dp"
-                            app:hintTextColor="?attr/colorPrimary"
+                            app:endIconContentDescription="Select capacity"
+                            app:endIconDrawable="@drawable/ic_capacity"
+                            app:endIconMode="custom"
                             app:endIconTint="?attr/colorPrimary"
-                            app:helperText="Capacity must be a valid number">
+                            app:hintTextColor="?attr/colorPrimary">
+
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/editCapacity"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="Capacity"
                                 android:inputType="number"
                                 android:maxLength="3"
-                                android:contentDescription="Capacity"
-                                android:textColor="?attr/colorOnSurface"
+                                android:padding="12dp"
                                 android:textAppearance="?attr/textAppearanceBodyLarge"
-                                android:padding="12dp"/>
+                                android:textColor="?attr/colorOnSurface" />
                         </com.google.android.material.textfield.TextInputLayout>
+
                         <Space
                             android:layout_width="8dp"
                             android:layout_height="wrap_content" />
+
                         <com.google.android.material.textfield.TextInputLayout
                             android:id="@+id/tilRoomLocation"
+                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:hint="Room Location"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                             android:contentDescription="Room location"
+                            android:hint="Room Location"
+                            app:boxCornerRadiusBottomEnd="16dp"
+                            app:boxCornerRadiusBottomStart="16dp"
+                            app:boxCornerRadiusTopEnd="16dp"
+                            app:boxCornerRadiusTopStart="16dp"
                             app:boxStrokeColor="?attr/colorPrimary"
                             app:boxStrokeWidth="2dp"
-                            app:boxCornerRadiusTopStart="16dp"
-                            app:boxCornerRadiusTopEnd="16dp"
-                            app:boxCornerRadiusBottomStart="16dp"
-                            app:boxCornerRadiusBottomEnd="16dp"
-                            app:hintTextColor="?attr/colorPrimary"
                             app:endIconTint="?attr/colorPrimary"
-                            >
+                            app:hintTextColor="?attr/colorPrimary">
 
                             <com.google.android.material.textfield.MaterialAutoCompleteTextView
                                 android:id="@+id/autoRoomLocation"
@@ -309,67 +324,68 @@
                                 android:focusable="false"
                                 android:importantForAccessibility="yes"
                                 android:inputType="none"
-                                android:textAppearance="?attr/textAppearanceBodyLarge"
                                 android:padding="12dp"
-                                android:textColor="?attr/colorOnSurface"/>
+                                android:textAppearance="?attr/textAppearanceBodyLarge"
+                                android:textColor="?attr/colorOnSurface" />
                         </com.google.android.material.textfield.TextInputLayout>
                     </LinearLayout>
 
                     <!-- Price -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilPrice"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
                         android:hint="Price (£)"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusTopStart="16dp"
                         app:boxStrokeColor="?attr/colorPrimary"
                         app:boxStrokeWidth="2dp"
-                        app:boxCornerRadiusTopStart="16dp"
-                        app:boxCornerRadiusTopEnd="16dp"
-                        app:boxCornerRadiusBottomStart="16dp"
-                        app:boxCornerRadiusBottomEnd="16dp"
-                        app:hintTextColor="?attr/colorPrimary"
                         app:endIconTint="?attr/colorPrimary"
-                        android:layout_marginBottom="16dp"
-                        >
+                        app:hintTextColor="?attr/colorPrimary">
+
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editPrice"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:contentDescription="Price"
                             android:inputType="numberDecimal"
                             android:maxLength="6"
-                            android:contentDescription="Price"
-                            android:textColor="?attr/colorOnSurface"
+                            android:padding="12dp"
                             android:textAppearance="?attr/textAppearanceBodyLarge"
-                            android:padding="12dp"/>
+                            android:textColor="?attr/colorOnSurface" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Description -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/tilDescription"
+                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Description"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
                         android:layout_marginBottom="16dp"
+                        android:hint="Description"
+                        app:boxCornerRadiusBottomEnd="16dp"
+                        app:boxCornerRadiusBottomStart="16dp"
+                        app:boxCornerRadiusTopEnd="16dp"
+                        app:boxCornerRadiusTopStart="16dp"
                         app:boxStrokeColor="?attr/colorPrimary"
                         app:boxStrokeWidth="2dp"
-                        app:boxCornerRadiusTopStart="16dp"
-                        app:boxCornerRadiusTopEnd="16dp"
-                        app:boxCornerRadiusBottomStart="16dp"
-                        app:boxCornerRadiusBottomEnd="16dp"
-                        app:hintTextColor="?attr/colorPrimary"
-                        app:endIconTint="?attr/colorPrimary">
+                        app:endIconTint="?attr/colorPrimary"
+                        app:hintTextColor="?attr/colorPrimary">
+
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editDescription"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:contentDescription="Description"
                             android:inputType="textMultiLine"
                             android:minLines="3"
-                            android:contentDescription="Description"
-                            android:textColor="?attr/colorOnSurfaceVariant"
+                            android:padding="12dp"
                             android:textAppearance="?attr/textAppearanceBodyLarge"
-                            android:padding="12dp"/>
+                            android:textColor="?attr/colorOnSurfaceVariant" />
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>

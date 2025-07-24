@@ -37,14 +37,13 @@ import com.google.android.material.appbar.MaterialToolbar;
 public class AddCourseActivity extends AppCompatActivity {
 
     private EditText courseName, price, capacity, description, duration;
-    private EditText time;
+    private EditText time, etDaysOfWeek;
     private String selectedDay = ""; // Changed to single String
     private static final String[] DAYS = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
     private CourseDao courseDao;
-    protected TextInputLayout tilCourseName, tilTime, tilCapacity, tilDuration, tilPrice, tilType, tilDescription, tilRoomLocation;
+    protected TextInputLayout tilCourseName, tilTime, tilCapacity, tilDuration, tilPrice, tilType, tilDescription, tilRoomLocation, tilDaysOfWeek;
     private MaterialAutoCompleteTextView autoType, autoRoomLocation;
     private View progressBar;
-    private TextView selectedDaysText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +62,9 @@ public class AddCourseActivity extends AppCompatActivity {
         autoType = findViewById(R.id.autoType);
         description = findViewById(R.id.editDescription);
         autoRoomLocation = findViewById(R.id.autoRoomLocation);
-        selectedDaysText = findViewById(R.id.selectedDaysText);
         progressBar = findViewById(R.id.progressBar);
+
+        etDaysOfWeek = findViewById(R.id.etDaysOfWeek);
 
         tilCourseName = findViewById(R.id.tilCourseName);
         tilTime = findViewById(R.id.tilTime);
@@ -74,6 +74,7 @@ public class AddCourseActivity extends AppCompatActivity {
         tilType = findViewById(R.id.tilType);
         tilDescription = findViewById(R.id.tilDescription);
         tilRoomLocation = findViewById(R.id.tilRoomLocation);
+        tilDaysOfWeek = findViewById(R.id.tilDaysOfWeek);
 
         addClearErrorOnInput(courseName, tilCourseName);
         addClearErrorOnInput(time, tilTime);
@@ -81,6 +82,7 @@ public class AddCourseActivity extends AppCompatActivity {
         addClearErrorOnInput(duration, tilDuration);
         addClearErrorOnInput(price, tilPrice);
         addClearErrorOnInput(description, tilDescription);
+        addClearErrorOnInput(etDaysOfWeek, tilDaysOfWeek);
 
         autoType.setOnItemClickListener((parent, view, position, id) -> tilType.setError(null));
         autoRoomLocation.setOnItemClickListener((parent, view, position, id) -> tilRoomLocation.setError(null));
@@ -99,8 +101,10 @@ public class AddCourseActivity extends AppCompatActivity {
         duration.setFocusable(false);
         duration.setClickable(true);
 
-        MaterialButton btnSelectDays = findViewById(R.id.btnSelectDays);
-        btnSelectDays.setOnClickListener(v -> showDaysOfWeekDialog());
+        etDaysOfWeek = findViewById(R.id.etDaysOfWeek);
+        etDaysOfWeek.setOnClickListener(v -> showDaysOfWeekDialog());
+        etDaysOfWeek.setFocusable(false);
+        etDaysOfWeek.setClickable(true);
 
         String[] types = {"Flow Yoga", "Aerial Yoga", "Family Yoga", "Other"};
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, types);
@@ -188,8 +192,10 @@ public class AddCourseActivity extends AppCompatActivity {
                     }
                     // Set the clicked chip as checked
                     chip.setChecked(true);
-                    selectedDay = chip.getText().toString();
-                    selectedDaysText.setText(selectedDay);
+                    String chipText = chip.getText().toString();
+                    String abbr = chipText.length() > 3 ? chipText.substring(0, 1).toUpperCase() + chipText.substring(1, 3).toLowerCase() : chipText;
+                    selectedDay = abbr;
+                    etDaysOfWeek.setText(abbr);
                     dialog.dismiss(); // Dismiss dialog after selection
                 });
             }
@@ -231,57 +237,47 @@ public class AddCourseActivity extends AppCompatActivity {
 
     protected boolean validateInputs() {
         if (ValidationUtils.isEmpty(courseName)) {
-            tilCourseName.setError("Course name is required");
-            courseName.requestFocus();
+            Toast.makeText(this, "Course name is required", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (selectedDay.isEmpty()) {
+        if (etDaysOfWeek.getText().toString().isEmpty()) {
             Snackbar.make(findViewById(android.R.id.content), "Please select a day of the week.", Snackbar.LENGTH_SHORT).show();
             return false;
         }
         if (ValidationUtils.isEmpty(time)) {
-            tilTime.setError("Time is required");
-            time.requestFocus();
+            Toast.makeText(this, "Time is required", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (ValidationUtils.isEmpty(duration)) {
-            tilDuration.setError("Duration is required");
-            duration.requestFocus();
+            Toast.makeText(this, "Duration is required", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (autoType.getText().toString().trim().isEmpty()) {
-            tilType.setError("Type is required");
-            autoType.requestFocus();
+            Toast.makeText(this, "Type is required", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (ValidationUtils.isEmpty(capacity)) {
-            tilCapacity.setError("Capacity is required");
-            capacity.requestFocus();
+            Toast.makeText(this, "Capacity is required", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (autoRoomLocation.getText().toString().trim().isEmpty()) {
-            tilRoomLocation.setError("Room location is required");
-            autoRoomLocation.requestFocus();
+            Toast.makeText(this, "Room location is required", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (ValidationUtils.isEmpty(price)) {
-            tilPrice.setError("Price is required");
-            price.requestFocus();
+            Toast.makeText(this, "Price is required", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (!ValidationUtils.isValidNumber(capacity)) {
-            tilCapacity.setError("Capacity must be a valid number");
-            capacity.requestFocus();
+            Toast.makeText(this, "Capacity must be a valid number", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (!isValidDuration(duration)) {
-            tilDuration.setError("Duration must be 1-60");
-            duration.requestFocus();
+            Toast.makeText(this, "Duration must be 1-60", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (!ValidationUtils.isValidNumber(price)) {
-            tilPrice.setError("Price must be a valid number");
-            price.requestFocus();
+            Toast.makeText(this, "Price must be a valid number", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

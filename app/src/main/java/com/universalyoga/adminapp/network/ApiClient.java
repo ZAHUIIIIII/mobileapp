@@ -8,7 +8,7 @@ public class ApiClient {
     public static Retrofit get() {
         if (retrofit==null) {
             retrofit = new Retrofit.Builder()
-                    .baseUrl("https://your-cloud-api.com/")
+                    .baseUrl("https://yoga-19447-default-rtdb.asia-southeast1.firebasedatabase.app/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }

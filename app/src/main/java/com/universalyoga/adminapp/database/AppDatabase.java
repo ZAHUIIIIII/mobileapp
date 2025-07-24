@@ -7,7 +7,7 @@ import android.content.Context;
 import com.universalyoga.adminapp.models.YogaCourse;
 import com.universalyoga.adminapp.models.YogaInstance;
 
-@Database(entities = {YogaCourse.class, YogaInstance.class}, version = 2, exportSchema = false)
+@Database(entities = {YogaCourse.class, YogaInstance.class}, version = 3, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
     public abstract CourseDao courseDao();
@@ -20,6 +20,7 @@ public abstract class AppDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "yoga_courses.db")
                             .fallbackToDestructiveMigration()
+                            .addMigrations(new Migration2To3())
                             .build();
                 }
             }

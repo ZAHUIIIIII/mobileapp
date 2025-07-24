@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {},
+  "extends": "expo/tsconfig.base",
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+, "components/ui/slider.js", "components/ui/sonner.js", "components/ui/switch.js", "components/ui/table.js"  ]
+}

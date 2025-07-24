@@ -33,19 +33,19 @@ import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.appbar.MaterialToolbar;
+import androidx.lifecycle.Observer;
 
 public class EditCourseActivity extends AppCompatActivity {
     private int id;
     private CourseDao courseDao;
-    private EditText courseName, time, capacity, description, duration;
+    private EditText courseName, time, capacity, description, duration, etDaysOfWeek;
     private EditText price;
     private MaterialAutoCompleteTextView autoType, autoRoomLocation;
     private View progressBar;
-    private TextInputLayout tilCourseName, tilTime, tilCapacity, tilDuration, tilPrice, tilType, tilDescription, tilRoomLocation;
-    private String fullSelectedDate = null;
+    private TextInputLayout tilCourseName, tilTime, tilCapacity, tilDuration, tilPrice, tilType, tilDescription, tilRoomLocation, tilDaysOfWeek;
     private String selectedDay = ""; // Changed to single String
     private static final String[] DAYS = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-    private TextView selectedDaysText;
+    private String originalCourseName, originalTime, originalCapacity, originalDuration, originalPrice, originalType, originalDescription, originalRoomLocation, originalDaysOfWeek;
 
     @Override
     protected void onCreate(Bundle s){
@@ -58,6 +58,22 @@ public class EditCourseActivity extends AppCompatActivity {
 
         id = getIntent().getIntExtra("id", -1);
         courseDao = AppDatabase.getInstance(this).courseDao();
+        progressBar = findViewById(R.id.progressBar);
+        if (progressBar == null) {
+            android.util.Log.e("EditCourseActivity", "progressBar is null after findViewById!");
+        }
+        progressBar.setVisibility(View.VISIBLE);
+
+        // Use LiveData to observe the course and update UI when loaded
+        courseDao.getByIdLive(id).observe(this, new Observer<YogaCourse>() {
+            @Override
+            public void onChanged(YogaCourse course) {
+                if (course != null) {
+                    populateFields(course);
+                    progressBar.setVisibility(View.GONE);
+                }
+            }
+        });
 
         courseName = findViewById(R.id.editCourseName);
         time = findViewById(R.id.editTime);
@@ -67,8 +83,7 @@ public class EditCourseActivity extends AppCompatActivity {
         autoType = findViewById(R.id.autoType);
         description = findViewById(R.id.editDescription);
         autoRoomLocation = findViewById(R.id.autoRoomLocation);
-        progressBar = findViewById(R.id.progressBar);
-        selectedDaysText = findViewById(R.id.selectedDaysText);
+        etDaysOfWeek = findViewById(R.id.etDaysOfWeek);
 
         tilCourseName = findViewById(R.id.tilCourseName);
         tilTime = findViewById(R.id.tilTime);
@@ -78,14 +93,24 @@ public class EditCourseActivity extends AppCompatActivity {
         tilType = findViewById(R.id.tilType);
         tilDescription = findViewById(R.id.tilDescription);
         tilRoomLocation = findViewById(R.id.tilRoomLocation);
+        tilDaysOfWeek = findViewById(R.id.tilDaysOfWeek);
 
-        
+        addClearErrorOnInput(courseName, tilCourseName);
+        addClearErrorOnInput(time, tilTime);
+        addClearErrorOnInput(capacity, tilCapacity);
+        addClearErrorOnInput(duration, tilDuration);
+        addClearErrorOnInput(price, tilPrice);
+        addClearErrorOnInput(description, tilDescription);
+        addClearErrorOnInput(etDaysOfWeek, tilDaysOfWeek);
 
-        MaterialButton btnUpdate = findViewById(R.id.btnUpdate);
-        MaterialButton btnDelete = findViewById(R.id.btnDelete);
+        autoType.setOnItemClickListener((parent, view, position, id) -> tilType.setError(null));
+        autoRoomLocation.setOnItemClickListener((parent, view, position, id) -> tilRoomLocation.setError(null));
+
+        MaterialButton btnSave = findViewById(R.id.btnSave);
+        MaterialButton btnCancel = findViewById(R.id.btnCancel);
         MaterialButton btnViewInstances = findViewById(R.id.btnViewInstances);
-        btnUpdate.setOnClickListener(v -> handleUpdate());
-        btnDelete.setOnClickListener(v -> showDeleteConfirmation());
+        btnSave.setOnClickListener(v -> handleUpdate());
+        btnCancel.setOnClickListener(v -> finish());
         btnViewInstances.setOnClickListener(v -> {
             Intent intent = new Intent(this, ClassInstanceActivity.class);
             intent.putExtra("courseId", id);
@@ -95,12 +120,13 @@ public class EditCourseActivity extends AppCompatActivity {
         duration.setOnClickListener(v -> showDurationPicker());
         duration.setFocusable(false);
         duration.setClickable(true);
-        time.setOnClickListener(v -> showTimePicker());
+        time.setOnClickListener(v -> showTimePicker(time));
         time.setFocusable(false);
         time.setClickable(true);
 
-        MaterialButton btnSelectDays = findViewById(R.id.btnSelectDays);
-        btnSelectDays.setOnClickListener(v -> showDaysOfWeekDialog());
+        etDaysOfWeek.setOnClickListener(v -> showDaysOfWeekDialog());
+        etDaysOfWeek.setFocusable(false);
+        etDaysOfWeek.setClickable(true);
 
         String[] types = {"Flow Yoga", "Aerial Yoga", "Family Yoga", "Other"};
         ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, types);
@@ -108,19 +134,22 @@ public class EditCourseActivity extends AppCompatActivity {
         String[] rooms = {"Room 1", "Room 2", "Room 3", "Room 4", "Room 5"};
         ArrayAdapter<String> roomAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, rooms);
         autoRoomLocation.setAdapter(roomAdapter);
-
-        new Thread(() -> {
-            YogaCourse course = courseDao.getById(id);
-            if (course != null) {
-                runOnUiThread(() -> populateFields(course));
-            }
-        }).start();
     }
 
-    private void showTimePicker() {
+    private void addClearErrorOnInput(EditText field, TextInputLayout til) {
+        field.addTextChangedListener(new TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (til != null) til.setError(null);
+            }
+            @Override public void afterTextChanged(Editable s) {}
+        });
+    }
+
+    private void showTimePicker(final EditText timeField) {
         int hour = 10;
         int minute = 0;
-        String current = time.getText().toString();
+        String current = timeField.getText().toString();
         if (!current.isEmpty() && current.contains(":")) {
             String[] parts = current.split(":");
             try {
@@ -133,7 +162,7 @@ public class EditCourseActivity extends AppCompatActivity {
             int hour12 = h % 12;
             if (hour12 == 0) hour12 = 12;
             String formatted = String.format(Locale.getDefault(), "%02d:%02d %s", hour12, m, ampm);
-            time.setText(formatted);
+            timeField.setText(formatted);
         }, hour, minute, false);
         dialog.show();
     }
@@ -164,7 +193,6 @@ public class EditCourseActivity extends AppCompatActivity {
             calendar.setTimeInMillis(selection);
             SimpleDateFormat fullFormat = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
             String fullDate = fullFormat.format(calendar.getTime());
-            fullSelectedDate = fullDate;
         });
         datePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
     }
@@ -195,8 +223,10 @@ public class EditCourseActivity extends AppCompatActivity {
                     }
                     // Set the clicked chip as checked
                     chip.setChecked(true);
-                    selectedDay = chip.getText().toString();
-                    selectedDaysText.setText(selectedDay);
+                    String chipText = chip.getText().toString();
+                    String abbr = chipText.length() > 3 ? chipText.substring(0, 1).toUpperCase() + chipText.substring(1, 3).toLowerCase() : chipText;
+                    selectedDay = abbr;
+                    etDaysOfWeek.setText(abbr);
                     dialog.dismiss(); // Dismiss dialog after selection
                 });
             }
@@ -216,8 +246,18 @@ public class EditCourseActivity extends AppCompatActivity {
         autoRoomLocation.setText(course.getRoomLocation(), false);
         if (course.getDaysOfWeek() != null && !course.getDaysOfWeek().isEmpty()) {
             selectedDay = course.getDaysOfWeek();
+            etDaysOfWeek.setText(selectedDay);
         }
-        selectedDaysText.setText(selectedDay);
+
+        originalCourseName = course.getCourseName();
+        originalTime = course.getTime();
+        originalCapacity = String.valueOf(course.getCapacity());
+        originalDuration = String.valueOf(course.getDuration()) + " min";
+        originalPrice = String.valueOf(course.getPrice());
+        originalType = course.getType();
+        originalDescription = course.getDescription();
+        originalRoomLocation = course.getRoomLocation();
+        originalDaysOfWeek = course.getDaysOfWeek();
     }
 
     private void handleUpdate() {
@@ -231,7 +271,7 @@ public class EditCourseActivity extends AppCompatActivity {
         final String typeStr = autoType.getText().toString().trim();
         final String descStr = description.getText().toString().trim();
         final String roomStr = autoRoomLocation.getText().toString().trim();
-        final String daysOfWeekStr = selectedDay; // Use selectedDay
+        final String daysOfWeekStr = etDaysOfWeek.getText().toString().trim();
         final int courseId = id;
         new Thread(() -> {
             try {
@@ -277,7 +317,7 @@ public class EditCourseActivity extends AppCompatActivity {
                 if (changes.length() == 0) {
                     runOnUiThread(() -> {
                         progressBar.setVisibility(View.GONE);
-                        Snackbar.make(findViewById(android.R.id.content), "No changes detected.", Snackbar.LENGTH_LONG).show();
+                        Toast.makeText(EditCourseActivity.this, "No changes detected.", Toast.LENGTH_SHORT).show();
                     });
                     return;
                 }
@@ -300,6 +340,15 @@ public class EditCourseActivity extends AppCompatActivity {
     }
 
     private void actuallyUpdateCourse(YogaCourse updatedCourse, YogaCourse oldCourse) {
+        if (updatedCourse.getId() == 0) {
+            android.util.Log.e("EditCourseActivity", "Attempting to update a course with id=0! This will not update the correct row.");
+            runOnUiThread(() -> {
+                progressBar.setVisibility(View.GONE);
+                Snackbar.make(findViewById(android.R.id.content), "Error: Course ID is 0. Update aborted.", Snackbar.LENGTH_LONG).show();
+            });
+            return;
+        }
+        android.util.Log.i("EditCourseActivity", "Updating course with id=" + updatedCourse.getId());
         progressBar.setVisibility(View.VISIBLE);
         new Thread(() -> {
             try {
@@ -307,19 +356,8 @@ public class EditCourseActivity extends AppCompatActivity {
                 runOnUiThread(() -> {
                     progressBar.setVisibility(View.GONE);
                     if (result > 0) {
-                        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Course updated!", Snackbar.LENGTH_SHORT)
-                            .setAction("Undo", v -> {
-                                new Thread(() -> {
-                                    courseDao.update(oldCourse);
-                                }).start();
-                            });
-                        snackbar.addCallback(new com.google.android.material.snackbar.BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                            @Override
-                            public void onDismissed(Snackbar transientBottomBar, int event) {
-                                finish();
-                            }
-                        });
-                        snackbar.show();
+                        com.universalyoga.adminapp.utils.ToastHelper.pendingToastMessage = "Course updated successfully!";
+                        finish();
                     } else {
                         Snackbar.make(findViewById(android.R.id.content), "Update failed!", Snackbar.LENGTH_LONG).show();
                     }
@@ -335,57 +373,47 @@ public class EditCourseActivity extends AppCompatActivity {
 
     protected boolean validateInputs() {
         if (ValidationUtils.isEmpty(courseName)) {
-            tilCourseName.setError("Course name is required");
-            courseName.requestFocus();
+            Toast.makeText(this, "Course name is required", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (ValidationUtils.isEmpty(time)) {
-            tilTime.setError("Time is required");
-            time.requestFocus();
+            Toast.makeText(this, "Time is required", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (ValidationUtils.isEmpty(capacity)) {
-            tilCapacity.setError("Capacity is required");
-            capacity.requestFocus();
+            Toast.makeText(this, "Capacity is required", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (ValidationUtils.isEmpty(duration)) {
-            tilDuration.setError("Duration is required");
-            duration.requestFocus();
+            Toast.makeText(this, "Duration is required", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (ValidationUtils.isEmpty(price)) {
-            tilPrice.setError("Price is required");
-            price.requestFocus();
+            Toast.makeText(this, "Price is required", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (autoType.getText().toString().trim().isEmpty()) {
-            tilType.setError("Type is required");
-            autoType.requestFocus();
+            Toast.makeText(this, "Type is required", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (autoRoomLocation.getText().toString().trim().isEmpty()) {
-            tilRoomLocation.setError("Room location is required");
-            autoRoomLocation.requestFocus();
+            Toast.makeText(this, "Room location is required", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (!ValidationUtils.isValidNumber(capacity)) {
-            tilCapacity.setError("Capacity must be a valid number");
-            capacity.requestFocus();
+            Toast.makeText(this, "Capacity must be a valid number", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (!isValidDuration(duration)) {
-            tilDuration.setError("Duration must be 1-60");
-            duration.requestFocus();
+            Toast.makeText(this, "Duration must be 1-60", Toast.LENGTH_SHORT).show();
             return false;
         }
         if (!ValidationUtils.isValidNumber(price)) {
-            tilPrice.setError("Price must be a valid number");
-            price.requestFocus();
+            Toast.makeText(this, "Price must be a valid number", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (selectedDay.isEmpty()) {
-            Snackbar.make(findViewById(android.R.id.content), "Please select a day of the week.", Snackbar.LENGTH_SHORT).show();
+        if (etDaysOfWeek.getText().toString().isEmpty()) {
+            Toast.makeText(this, "Please select a day of the week.", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -404,53 +432,7 @@ public class EditCourseActivity extends AppCompatActivity {
         }
     }
 
-    
-
-    private void showDeleteConfirmation() {
-        progressBar.setVisibility(View.VISIBLE);
-        new AlertDialog.Builder(this)
-            .setTitle("Delete Course")
-            .setMessage("Are you sure you want to delete this course?")
-            .setPositiveButton("Delete", (dialog, which) -> {
-                new Thread(() -> {
-                    try {
-                        final YogaCourse course = courseDao.getById(id);
-                        int result = courseDao.delete(course);
-                        runOnUiThread(() -> {
-                            progressBar.setVisibility(View.GONE);
-                            if (result > 0) {
-                                final YogaCourse backup = course;
-                                Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content), "Course deleted!", Snackbar.LENGTH_SHORT)
-                                    .setAction("View", v2 -> {
-                                        finish();
-                                    })
-                                    .setAction("Undo", v -> {
-                                        new Thread(() -> {
-                                            courseDao.insert(backup);
-                                        }).start();
-                                    });
-                                snackbar.addCallback(new com.google.android.material.snackbar.BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                                    @Override
-                                    public void onDismissed(Snackbar transientBottomBar, int event) {
-                                        finish();
-                                    }
-                                });
-                                snackbar.show();
-                            } else {
-                                Snackbar.make(findViewById(android.R.id.content), "Delete failed!", Snackbar.LENGTH_LONG).show();
-                            }
-                        });
-                    } catch (Exception e) {
-                        runOnUiThread(() -> {
-                            progressBar.setVisibility(View.GONE);
-                            Snackbar.make(findViewById(android.R.id.content), "Error: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
-                        });
-                    }
-                }).start();
-            })
-            .setNegativeButton("Cancel", null)
-            .show();
+    private void showError(String message) {
+        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
     }
-
-    
 }
