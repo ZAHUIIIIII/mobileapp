@@ -11,23 +11,11 @@ export function AppProvider({ children }) {
   const [cartItems, setCartItems] = useState([]);
   const [bookings, setBookings] = useState([]);
 
-  // Debug logging
-  console.log('AppContext cartItems:', { 
-    cartItems: cartItems, 
-    cartItemsType: typeof cartItems, 
-    cartItemsIsArray: Array.isArray(cartItems),
-    cartItemsLength: cartItems?.length 
-  });
 
-  // Ensure cartItems is always an array
-  const safeCartItems = Array.isArray(cartItems) ? cartItems : [];
 
   const addToCart = (yogaClass) => {
-    console.log('addToCart called with:', yogaClass);
     setCartItems(prev => {
-      // Safety check - ensure prev is always an array
       const safePrev = Array.isArray(prev) ? prev : [];
-      console.log('addToCart prev state:', safePrev);
       
       const existing = safePrev.find(item => item.id === yogaClass.id);
       if (existing) {

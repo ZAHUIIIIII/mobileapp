@@ -61,23 +61,16 @@ export default function ClassBrowser({ onAddToCart }) {
   const loadClasses = useCallback(async () => {
     setLoading(true);
     try {
-      console.log("Starting to load classes...");
       const result = await fetchClassesWithFreshness();
-      console.log("Fetch result:", result);
       
       setClasses(result.classes || []);
       setDataSource(result.dataSource);
       setDataFreshness(result.isFresh);
       setLastUpdate(result.lastUpdate);
       
-      console.log(`Loaded ${result.classes?.length || 0} classes`);
-      console.log(`Data source: ${result.dataSource}`);
-      console.log(`Data fresh: ${result.isFresh}`);
-      
       // Clean up stale cart items and show notification if needed
       const removedItems = await cleanupStaleCartItems();
       if (removedItems && removedItems.length > 0) {
-        console.log(`${removedItems.length} stale items removed from cart`);
         setNotification(`${removedItems.length} class(es) removed from cart - no longer available`);
         // Auto-hide notification after 5 seconds
         setTimeout(() => setNotification(null), 5000);
@@ -104,19 +97,15 @@ export default function ClassBrowser({ onAddToCart }) {
     setRefreshing(true);
     
     try {
-      console.log("Force refreshing data from Firebase...");
       const result = await fetchClassesWithFreshness();
       setClasses(result.classes || []);
       setDataSource(result.dataSource);
       setDataFreshness(result.isFresh);
       setLastUpdate(result.lastUpdate);
       
-      console.log(`Refreshed: ${result.classes?.length || 0} classes from ${result.dataSource}`);
-      
       // Clean up stale cart items and show notification if needed
       const removedItems = await cleanupStaleCartItems();
       if (removedItems && removedItems.length > 0) {
-        console.log(`${removedItems.length} stale items removed from cart`);
         setNotification(`${removedItems.length} class(es) removed from cart - no longer available`);
         // Auto-hide notification after 5 seconds
         setTimeout(() => setNotification(null), 5000);
@@ -148,26 +137,8 @@ export default function ClassBrowser({ onAddToCart }) {
 
     const isVisible = timeMatch && dayMatch && searchMatch;
     
-    // Debug logging for first few classes
-    if (classes.indexOf(yogaClass) < 3) {
-      console.log(`Class ${yogaClass.courseName || yogaClass.name}:`, {
-        dayOfWeek,
-        dayOfWeekAbbr,
-        selectedDays: selectedDays.map(getDayAbbr),
-        dayMatch,
-        timeMatch,
-        searchMatch,
-        isVisible
-      });
-    }
-    
     return isVisible;
   });
-
-  console.log(`Filtered classes: ${filteredClasses.length} out of ${classes.length} total classes`);
-  console.log(`Selected days: ${selectedDays.join(', ')}`);
-  console.log(`Selected time: ${selectedTime}`);
-  console.log(`Search query: ${searchQuery}`);
 
   const getDifficultyColor = (difficulty) => {
     switch (difficulty?.toLowerCase()) {

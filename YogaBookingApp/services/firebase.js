@@ -26,7 +26,7 @@ try {
     realtimeDb = getDatabase(app);
   }
 } catch (error) {
-  console.log("Firebase not configured, using mock data");
+  // Firebase not configured, using mock data
 }
 
 // Mock data for development
@@ -125,7 +125,6 @@ const mockClasses = [
 
 // Helper function to get mock data
 const getMockClasses = () => {
-  console.log("Fetching mock classes as Firebase is not configured or failed.");
   return mockClasses; // Return directly, not as a Promise
 };
 
@@ -133,7 +132,6 @@ const getMockClasses = () => {
 export const fetchClasses = async () => {
   try {
     if (!realtimeDb && !db) {
-      console.log("No Firebase configured, using mock data");
       return getMockClasses();
     }
 

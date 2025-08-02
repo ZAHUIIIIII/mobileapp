@@ -18,11 +18,8 @@
       "bundler": "metro",
       "output": "static"
     },
-    "plugins": [
+        "plugins": [
       "expo-router"
-    ],
-    "experiments": {
-      "typedRoutes": true
-    }
+    ]
   }
 }
