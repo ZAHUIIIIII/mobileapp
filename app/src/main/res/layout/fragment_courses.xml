@@ -1,230 +1,415 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/md_theme_background">
+    android:orientation="vertical"
+    android:background="@color/background">
 
+    <!-- Header Section -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:paddingBottom="8dp">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardTotalCourses"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            app:cardBackgroundColor="?attr/colorSurface"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="4dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="16dp"
-                android:weightSum="3">
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvStatsCourses"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                        android:textColor="?attr/colorPrimary"
-                        tools:text="12" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Courses"
-                        android:textAppearance="?attr/textAppearanceBodyMedium"
-                        android:textColor="?attr/colorOnSurfaceVariant" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="?attr/colorOutline" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvStatsCapacity"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                        android:textColor="?attr/colorPrimary"
-                        tools:text="180" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Total Capacity"
-                        android:textAppearance="?attr/textAppearanceBodyMedium"
-                        android:textColor="?attr/colorOnSurfaceVariant" />
-                </LinearLayout>
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="?attr/colorOutline" />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:id="@+id/tvStatsRevenue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?attr/textAppearanceHeadlineSmall"
-                        android:textColor="?attr/colorPrimary"
-                        tools:text="£2.7k" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Est. Revenue"
-                        android:textAppearance="?attr/textAppearanceBodyMedium"
-                        android:textColor="?attr/colorOnSurfaceVariant" />
-                </LinearLayout>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:hint="Search Courses..."
-            app:boxCornerRadiusBottomEnd="12dp"
-            app:boxCornerRadiusBottomStart="12dp"
-            app:boxCornerRadiusTopEnd="12dp"
-            app:boxCornerRadiusTopStart="12dp"
-            app:endIconMode="clear_text"
-            app:startIconDrawable="@drawable/ic_search">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/editTextSearch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionSearch"
-                android:inputType="text"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!-- Sort and Bulk Actions Row -->
         <LinearLayout
-            android:id="@+id/layoutSortBulk"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="end"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:layout_marginBottom="4dp">
+            android:layout_weight="1"
+            android:orientation="vertical">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSortName"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sort by Name"
-                style="@style/Widget.Material3.Button.OutlinedButton"/>
+                android:text="Classes"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/foreground" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnSortPrice"
+            <TextView
+                android:id="@+id/tv_course_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sort by Price"
-                style="@style/Widget.Material3.Button.OutlinedButton"
-                android:layout_marginStart="8dp"/>
+                android:text="0 of 0 classes"
+                android:textSize="12sp"
+                android:textColor="@color/muted_foreground"
+                android:layout_marginTop="1dp" />
+
         </LinearLayout>
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerCourses"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:clipToPadding="false"
-            android:contentDescription="List of all yoga courses"
-            android:paddingBottom="80dp"
-            tools:listitem="@layout/item_course" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_course"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Class"
+            android:textSize="12sp"
+            app:icon="@drawable/ic_add"
+            app:iconSize="14dp"
+            app:iconGravity="textStart"
+            app:iconPadding="4dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            style="@style/Widget.YogaCourse.Button" />
 
     </LinearLayout>
 
+    <!-- Search and Filters Section -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginBottom="12dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/card"
+        app:strokeColor="@color/border"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <!-- Search Bar -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/input_background"
+                app:strokeColor="@color/border"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="@color/muted_foreground"
+                        android:layout_marginEnd="8dp" />
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_search"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Search classes, instructors, locations..."
+                        android:background="@null"
+                        android:padding="0dp"
+                        android:textSize="13sp"
+                        android:textColor="@color/foreground"
+                        android:textColorHint="@color/muted_foreground"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"
+                        android:maxLines="1" />
+
+                    <ImageView
+                        android:id="@+id/btn_clear_search_input"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_x"
+                        app:tint="@color/muted_foreground"
+                        android:layout_marginStart="6dp"
+                        android:visibility="gone"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="3dp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Advanced Filters Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_advanced_filters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Advanced Filters"
+                android:textSize="12sp"
+                app:icon="@drawable/ic_filter"
+                app:iconSize="14dp"
+                app:iconGravity="textStart"
+                app:iconPadding="6dp"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="8dp"
+                style="@style/Widget.YogaCourse.Button.Outline" />
+
+            <!-- Advanced Filters Content (Hidden by default) -->
+            <LinearLayout
+                android:id="@+id/layout_advanced_filters_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:layout_marginTop="8dp">
+
+                <!-- Active Filters Chip -->
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/chip_active_filters"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No filters applied"
+                    android:visibility="gone"
+                    app:chipBackgroundColor="@color/primary_10"
+                    app:chipStrokeColor="@color/primary"
+                    app:chipStrokeWidth="1dp"
+                    app:closeIconVisible="true"
+                    app:closeIcon="@drawable/ic_x"
+                    app:closeIconTint="@color/primary"
+                    style="@style/Widget.MaterialComponents.Chip.Choice" />
+
+                <!-- Filter Options -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp">
+
+                    <!-- Day Filter -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_day_filter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:hint="Filter by day"
+                        app:startIconDrawable="@drawable/ic_calendar"
+                        app:startIconTint="@color/muted_foreground"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/spinner_day_filter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:padding="12dp"
+                            android:textSize="13sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Type Filter -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_type_filter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:hint="Filter by type"
+                        app:startIconDrawable="@drawable/ic_type"
+                        app:startIconTint="@color/muted_foreground"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/spinner_type_filter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:padding="12dp"
+                            android:textSize="13sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Difficulty Filter -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_difficulty_filter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:hint="Filter by difficulty"
+                        app:startIconDrawable="@drawable/ic_star"
+                        app:startIconTint="@color/muted_foreground"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/spinner_difficulty_filter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:padding="12dp"
+                            android:textSize="13sp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <!-- Clear Filters Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_clear_filters"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Clear All Filters"
+                    android:textSize="12sp"
+                    app:icon="@drawable/ic_x"
+                    app:iconSize="14dp"
+                    app:iconGravity="textStart"
+                    app:iconPadding="6dp"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="8dp"
+                    style="@style/Widget.YogaCourse.Button.Outline"
+                    android:layout_marginTop="6dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Empty State -->
     <LinearLayout
         android:id="@+id/emptyStateLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:orientation="vertical"
-        android:padding="16dp"
-        android:visibility="gone"
-        tools:visibility="visible">
+        android:gravity="center"
+        android:padding="24dp"
+        android:visibility="gone">
 
-        <ImageView
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_marginBottom="16dp"
-            android:contentDescription="No courses icon"
-            android:src="@drawable/ic_courses"
-            app:tint="?attr/colorOnSurfaceVariant" />
+        <LinearLayout
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/bg_empty_state_icon"
+            android:gravity="center"
+            android:layout_marginBottom="16dp">
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:src="@drawable/ic_calendar"
+                app:tint="@color/primary" />
+
+        </LinearLayout>
 
         <TextView
-            android:id="@+id/tvEmptyCourses"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No courses found. Tap + to add one!"
-            android:textAlignment="center"
-            android:textAppearance="?attr/textAppearanceBodyLarge"
-            android:textColor="?attr/colorOnSurfaceVariant" />
+            android:text="No Classes Yet"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/foreground"
+            android:layout_marginBottom="8dp" />
 
-        <Button
-            android:id="@+id/btnAddCourse"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add New Course"
-            android:layout_marginTop="16dp"
-            android:layout_gravity="center" />
+            android:text="Get started by creating your first yoga class. You can add schedules, set capacity, and manage everything from here."
+            android:textSize="13sp"
+            android:textColor="@color/muted_foreground"
+            android:gravity="center"
+            android:layout_marginBottom="20dp"
+            android:maxWidth="280dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_create_first_course"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create First Class"
+            android:textSize="13sp"
+            app:icon="@drawable/ic_add"
+            app:iconSize="16dp"
+            app:iconGravity="textStart"
+            app:iconPadding="6dp"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            style="@style/Widget.YogaCourse.Button" />
+
     </LinearLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddCourse"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:contentDescription="Add new course"
-        android:src="@drawable/ic_add"
-        app:backgroundTint="?attr/colorPrimary"
-        app:tint="?attr/colorOnPrimary" />
+    <!-- No Results State -->
+    <LinearLayout
+        android:id="@+id/layout_no_results"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp"
+        android:visibility="gone">
 
-</FrameLayout>
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/ic_search"
+            app:tint="@color/muted_foreground"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Results Found"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/foreground"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Try adjusting your search criteria or filters"
+            android:textSize="13sp"
+            android:textColor="@color/muted_foreground"
+            android:layout_marginBottom="16dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_clear_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear Search"
+                android:textSize="13sp"
+                app:icon="@drawable/ic_x"
+                app:iconSize="14dp"
+                app:iconGravity="textStart"
+                app:iconPadding="4dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                style="@style/Widget.YogaCourse.Button.Outline"
+                android:layout_marginEnd="6dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_clear_all_filters"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear All"
+                android:textSize="13sp"
+                app:icon="@drawable/ic_filter"
+                app:iconSize="14dp"
+                app:iconGravity="textStart"
+                app:iconPadding="4dp"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="8dp"
+                style="@style/Widget.YogaCourse.Button.Outline" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Classes List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerCourses"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingHorizontal="12dp"
+        android:clipToPadding="false"
+        android:visibility="visible" />
+
+</LinearLayout>

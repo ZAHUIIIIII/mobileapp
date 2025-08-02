@@ -56,16 +56,23 @@ public class InstanceAdapter extends RecyclerView.Adapter<InstanceAdapter.ViewHo
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView tvCourseName, tvTeacherName, tvInstanceDate, tvInstanceDetails;
-        private ImageView ivOverflowMenu;
+        private TextView tvCourseName, tvDate, tvInstanceDetails, tvTime, tvTeacher, tvEnrollment, tvLocation, tvEnrollmentProgress;
+        private View btnEdit, btnDelete;
+        private com.google.android.material.progressindicator.LinearProgressIndicator progressEnrollment;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             tvCourseName = itemView.findViewById(R.id.tvCourseName);
-            tvTeacherName = itemView.findViewById(R.id.tvTeacherName);
-            tvInstanceDate = itemView.findViewById(R.id.tvInstanceDate);
+            tvDate = itemView.findViewById(R.id.tvDate);
             tvInstanceDetails = itemView.findViewById(R.id.tvInstanceDetails);
-            ivOverflowMenu = itemView.findViewById(R.id.ivOverflowMenu);
+            tvTime = itemView.findViewById(R.id.tvTime);
+            tvTeacher = itemView.findViewById(R.id.tvTeacher);
+            tvEnrollment = itemView.findViewById(R.id.tvEnrollment);
+            tvLocation = itemView.findViewById(R.id.tvLocation);
+            tvEnrollmentProgress = itemView.findViewById(R.id.tvEnrollmentProgress);
+            progressEnrollment = itemView.findViewById(R.id.progressEnrollment);
+            btnEdit = itemView.findViewById(R.id.btnEdit);
+            btnDelete = itemView.findViewById(R.id.btnDelete);
         }
 
         public void bind(YogaInstance instance) {
@@ -76,39 +83,56 @@ public class InstanceAdapter extends RecyclerView.Adapter<InstanceAdapter.ViewHo
                 itemView.post(() -> {
                     if (course != null) {
                         tvCourseName.setText(course.getCourseName());
-                        tvTeacherName.setText(String.format("with %s - %s", instance.getTeacher(), course.getRoomLocation()));
-                        tvTeacherName.setCompoundDrawableTintList(ContextCompat.getColorStateList(itemView.getContext(), R.color.md_theme_secondary));
+                        // Display comments if available, otherwise show a default message
+                        String comments = instance.getComments();
+                        if (comments != null && !comments.trim().isEmpty()) {
+                            tvInstanceDetails.setText(comments);
+                        } else {
+                            tvInstanceDetails.setText(String.format("Class instance for %s", course.getCourseName()));
+                        }
+                        tvLocation.setText(course.getRoomLocation() != null ? course.getRoomLocation() : "TBD");
                     } else {
                         tvCourseName.setText("Unknown Course"); // Fallback for missing course
-                        tvTeacherName.setText("with " + instance.getTeacher());
+                        // Display comments if available, otherwise show a default message
+                        String comments = instance.getComments();
+                        if (comments != null && !comments.trim().isEmpty()) {
+                            tvInstanceDetails.setText(comments);
+                        } else {
+                            tvInstanceDetails.setText("Class instance details");
+                        }
+                        tvLocation.setText("TBD");
                     }
                 });
             });
 
-            tvTeacherName.setText("with " + instance.getTeacher());
-            tvInstanceDate.setText(instance.getDate());
-            tvInstanceDetails.setText(instance.getStartTime() + " - " + instance.getEndTime() + " • " + instance.getEnrolled() + " / " + instance.getCapacity() + " filled");
+            tvDate.setText(instance.getDate());
+            tvTime.setText(instance.getStartTime() + " - " + instance.getEndTime());
+            tvTeacher.setText(instance.getTeacher());
+            tvEnrollment.setText(instance.getEnrolled() + "/" + instance.getCapacity() + " enrolled");
 
-            ivOverflowMenu.setOnClickListener(v -> {
-                PopupMenu popup = new PopupMenu(v.getContext(), v);
-                popup.getMenuInflater().inflate(R.menu.instance_item_menu, popup.getMenu());
-                popup.setOnMenuItemClickListener(item -> {
-                    if (item.getItemId() == R.id.action_edit) {
-                        if (listener != null) {
-                            listener.onEditClick(instance);
-                        }
-                        return true;
-                    } else if (item.getItemId() == R.id.action_delete) {
-                        if (listener != null) {
-                            listener.onDeleteClick(instance);
-                        }
-                        return true;
-                    } else {
-                        return false;
+            // Calculate and set enrollment progress
+            int enrolled = instance.getEnrolled();
+            int capacity = instance.getCapacity();
+            int progress = capacity > 0 ? (enrolled * 100) / capacity : 0;
+            tvEnrollmentProgress.setText(progress + "%");
+            progressEnrollment.setProgress(progress);
+
+            // Button click listeners
+            if (btnEdit != null) {
+                btnEdit.setOnClickListener(v -> {
+                    if (listener != null) {
+                        listener.onEditClick(instance);
                     }
                 });
-                popup.show();
-            });
+            }
+
+            if (btnDelete != null) {
+                btnDelete.setOnClickListener(v -> {
+                    if (listener != null) {
+                        listener.onDeleteClick(instance);
+                    }
+                });
+            }
         }
     }
 }

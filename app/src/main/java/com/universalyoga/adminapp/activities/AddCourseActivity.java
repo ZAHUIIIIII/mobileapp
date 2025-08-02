@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.TimePicker;
-import com.google.android.material.chip.Chip;
-import com.google.android.material.chip.ChipGroup;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 import com.google.android.material.button.MaterialButton;
@@ -15,12 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.universalyoga.adminapp.database.CourseDao;
 import com.universalyoga.adminapp.models.YogaCourse;
 import com.universalyoga.adminapp.utils.ValidationUtils;
+import com.universalyoga.adminapp.utils.ToastHelper;
 import com.universalyoga.adminapp.R;
 import java.util.Locale;
-import com.google.android.material.datepicker.MaterialDatePicker;
-import java.util.Calendar;
-import java.util.TimeZone;
-import java.text.SimpleDateFormat;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,283 +25,559 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import com.universalyoga.adminapp.database.AppDatabase;
 import android.content.Intent;
-import android.widget.Spinner;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.card.MaterialCardView;
+import java.util.HashMap;
+import java.util.Map;
+import com.universalyoga.adminapp.services.AutoSyncService;
 
 public class AddCourseActivity extends AppCompatActivity {
 
-    private EditText courseName, price, capacity, description, duration;
-    private EditText time, etDaysOfWeek;
-    private String selectedDay = ""; // Changed to single String
-    private static final String[] DAYS = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-    private CourseDao courseDao;
-    protected TextInputLayout tilCourseName, tilTime, tilCapacity, tilDuration, tilPrice, tilType, tilDescription, tilRoomLocation, tilDaysOfWeek;
-    private MaterialAutoCompleteTextView autoType, autoRoomLocation;
+    // Form fields
+    private MaterialAutoCompleteTextView spinnerDayOfWeek, spinnerType, spinnerDifficulty;
+    private EditText editTime, editCapacity, editDuration, editPrice, editRoomLocation, editInstructor, editDescription;
+    
+    // TextInputLayouts for validationf
+    private TextInputLayout tilDayOfWeek, tilTime, tilCapacity, tilDuration, tilPrice, tilType, tilRoomLocation, tilInstructor, tilDescription, tilDifficulty;
+    
+    // UI elements
     private View progressBar;
+    private MaterialCardView cardError;
+    private TextView tvErrorMessage;
+    private MaterialButton btnSave, btnCancel;
+    
+    // Data
+    private CourseDao courseDao;
+    private Map<String, String> errors = new HashMap<>();
+    private AutoSyncService autoSyncService;
+    
+    // Constants
+    private static final String[] DAYS_OF_WEEK = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+    private static final String[] CLASS_TYPES = {"Flow Yoga", "Aerial Yoga", "Family Yoga", "Hot Yoga", "Restorative Yoga", "Vinyasa Yoga", "Hatha Yoga", "Yin Yoga"};
+    private static final String[] DIFFICULTY_LEVELS = {"Beginner", "Intermediate", "Advanced", "All Levels"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_course);
 
-        MaterialToolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(v -> finish());
-
-        courseName = findViewById(R.id.editCourseName);
-        time = findViewById(R.id.editTime);
-        capacity = findViewById(R.id.editCapacity);
-        duration = findViewById(R.id.editDuration);
-        price = findViewById(R.id.editPrice);
-        autoType = findViewById(R.id.autoType);
-        description = findViewById(R.id.editDescription);
-        autoRoomLocation = findViewById(R.id.autoRoomLocation);
-        progressBar = findViewById(R.id.progressBar);
-
-        etDaysOfWeek = findViewById(R.id.etDaysOfWeek);
-
-        tilCourseName = findViewById(R.id.tilCourseName);
+        initializeViews();
+        setupToolbar();
+        setupDropdowns();
+        setupValidation();
+        setupClickListeners();
+        
+        courseDao = AppDatabase.getInstance(this).courseDao();
+        autoSyncService = new AutoSyncService(this);
+    }
+    
+    private void initializeViews() {
+        // Initialize form fields
+        spinnerDayOfWeek = findViewById(R.id.spinnerDayOfWeek);
+        spinnerType = findViewById(R.id.spinnerType);
+        spinnerDifficulty = findViewById(R.id.spinnerDifficulty);
+        editTime = findViewById(R.id.editTime);
+        editCapacity = findViewById(R.id.editCapacity);
+        editDuration = findViewById(R.id.editDuration);
+        editPrice = findViewById(R.id.editPrice);
+        editRoomLocation = findViewById(R.id.editRoomLocation);
+        editInstructor = findViewById(R.id.editInstructor);
+        editDescription = findViewById(R.id.editDescription);
+        
+        // Initialize TextInputLayouts
+        tilDayOfWeek = findViewById(R.id.tilDayOfWeek);
         tilTime = findViewById(R.id.tilTime);
         tilCapacity = findViewById(R.id.tilCapacity);
         tilDuration = findViewById(R.id.tilDuration);
         tilPrice = findViewById(R.id.tilPrice);
         tilType = findViewById(R.id.tilType);
-        tilDescription = findViewById(R.id.tilDescription);
         tilRoomLocation = findViewById(R.id.tilRoomLocation);
-        tilDaysOfWeek = findViewById(R.id.tilDaysOfWeek);
-
-        addClearErrorOnInput(courseName, tilCourseName);
-        addClearErrorOnInput(time, tilTime);
-        addClearErrorOnInput(capacity, tilCapacity);
-        addClearErrorOnInput(duration, tilDuration);
-        addClearErrorOnInput(price, tilPrice);
-        addClearErrorOnInput(description, tilDescription);
-        addClearErrorOnInput(etDaysOfWeek, tilDaysOfWeek);
-
-        autoType.setOnItemClickListener((parent, view, position, id) -> tilType.setError(null));
-        autoRoomLocation.setOnItemClickListener((parent, view, position, id) -> tilRoomLocation.setError(null));
-
-        courseDao = AppDatabase.getInstance(this).courseDao();
-
-        MaterialButton btnSave = findViewById(R.id.btnSave);
-        MaterialButton btnCancel = findViewById(R.id.btnCancel);
-        btnSave.setOnClickListener(v -> handleSave());
-        btnCancel.setOnClickListener(v -> finish());
-
-        time.setOnClickListener(v -> showTimePicker());
-        time.setFocusable(false);
-        time.setClickable(true);
-        duration.setOnClickListener(v -> showDurationPicker());
-        duration.setFocusable(false);
-        duration.setClickable(true);
-
-        etDaysOfWeek = findViewById(R.id.etDaysOfWeek);
-        etDaysOfWeek.setOnClickListener(v -> showDaysOfWeekDialog());
-        etDaysOfWeek.setFocusable(false);
-        etDaysOfWeek.setClickable(true);
-
-        String[] types = {"Flow Yoga", "Aerial Yoga", "Family Yoga", "Other"};
-        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, types);
-        autoType.setAdapter(typeAdapter);
-
-        String[] rooms = {"Room 1", "Room 2", "Room 3", "Room 4", "Room 5"};
-        ArrayAdapter<String> roomAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, rooms);
-        autoRoomLocation.setAdapter(roomAdapter);
+        tilInstructor = findViewById(R.id.tilInstructor);
+        tilDescription = findViewById(R.id.tilDescription);
+        tilDifficulty = findViewById(R.id.tilDifficulty);
+        
+        // Initialize UI elements
+        progressBar = findViewById(R.id.progressBar);
+        cardError = findViewById(R.id.cardError);
+        tvErrorMessage = findViewById(R.id.tvErrorMessage);
+        btnSave = findViewById(R.id.btnSave);
+        btnCancel = findViewById(R.id.btnCancel);
     }
-
-    private void showTimePicker() {
-        int hour = 10;
-        int minute = 0;
-        String current = time.getText().toString();
-        if (!current.isEmpty() && current.contains(":")) {
-            String[] parts = current.split(":");
-            try {
-                hour = Integer.parseInt(parts[0]);
-                minute = Integer.parseInt(parts[1].replaceAll("[^0-9]", ""));
-            } catch (Exception ignored) {}
-        }
-        TimePickerDialog dialog = new TimePickerDialog(this, (TimePicker view, int h, int m) -> {
-            String ampm = h >= 12 ? "PM" : "AM";
-            int hour12 = h % 12;
-            if (hour12 == 0) hour12 = 12;
-            String formatted = String.format(Locale.getDefault(), "%02d:%02d %s", hour12, m, ampm);
-            time.setText(formatted);
-        }, hour, minute, false);
-        dialog.show();
+    
+    private void setupToolbar() {
+        MaterialToolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v -> finish());
     }
-
-    private void showDurationPicker() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Select Duration (minutes)");
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_number_picker, null);
-        NumberPicker numberPicker = dialogView.findViewById(R.id.numberPicker);
-        numberPicker.setMinValue(1);
-        numberPicker.setMaxValue(60);
-        numberPicker.setValue(30);
-        builder.setView(dialogView);
-        builder.setPositiveButton("OK", (dialog, which) -> {
-            int value = numberPicker.getValue();
-            duration.setText(value + " min");
+    
+    private void setupDropdowns() {
+        // Day of week dropdown
+        ArrayAdapter<String> dayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, DAYS_OF_WEEK);
+        spinnerDayOfWeek.setAdapter(dayAdapter);
+        spinnerDayOfWeek.setOnItemClickListener((parent, view, position, id) -> {
+            clearError("dayOfWeek");
         });
-        builder.setNegativeButton("Cancel", null);
-        builder.show();
-    }
-
-    private void showDatePicker() {
-        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("Select a date")
-            .build();
-        datePicker.addOnPositiveButtonClickListener(selection -> {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(selection);
-            SimpleDateFormat fullFormat = new SimpleDateFormat("EEEE, MMMM d, yyyy", Locale.getDefault());
-            String fullDate = fullFormat.format(calendar.getTime());
+        
+        // Class type dropdown
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, CLASS_TYPES);
+        spinnerType.setAdapter(typeAdapter);
+        spinnerType.setOnItemClickListener((parent, view, position, id) -> {
+            clearError("type");
         });
-        datePicker.show(getSupportFragmentManager(), "MATERIAL_DATE_PICKER");
+        
+        // Difficulty dropdown
+        ArrayAdapter<String> difficultyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, DIFFICULTY_LEVELS);
+        spinnerDifficulty.setAdapter(difficultyAdapter);
+        spinnerDifficulty.setOnItemClickListener((parent, view, position, id) -> {
+            clearError("difficulty");
+        });
     }
+    
+    private void setupValidation() {
+        // Real-time validation on focus change
+        spinnerDayOfWeek.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus && !spinnerDayOfWeek.getText().toString().trim().isEmpty()) {
+                validateDayOfWeek();
+            }
+        });
 
-    private void showDaysOfWeekDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_days_of_week, null);
-        builder.setView(view);
+        editTime.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus && !editTime.getText().toString().trim().isEmpty()) {
+                validateTime();
+            }
+        });
 
-        ChipGroup chipGroup = view.findViewById(R.id.chipGroupDays);
+        spinnerType.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus && !spinnerType.getText().toString().trim().isEmpty()) {
+                validateType();
+            }
+        });
 
-        final AlertDialog dialog = builder.create();
+        editCapacity.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus && !editCapacity.getText().toString().trim().isEmpty()) {
+                validateCapacity();
+            }
+        });
 
-        // Pre-select the current day if it exists and set click listeners
-        for (int i = 0; i < DAYS.length; i++) {
-            Chip chip = (Chip) chipGroup.getChildAt(i);
-            if (chip != null) {
-                if (DAYS[i].equals(selectedDay)) {
-                    chip.setChecked(true);
+        editDuration.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus && !editDuration.getText().toString().trim().isEmpty()) {
+                validateDuration();
+            }
+        });
+
+        editPrice.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus && !editPrice.getText().toString().trim().isEmpty()) {
+                validatePrice();
+            }
+        });
+
+        // Clear errors when user starts typing
+        editCapacity.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().trim().isEmpty()) {
+                    clearError("capacity");
                 }
-                chip.setOnClickListener(v -> {
-                    // Uncheck all other chips
-                    for (int j = 0; j < chipGroup.getChildCount(); j++) {
-                        Chip otherChip = (Chip) chipGroup.getChildAt(j);
-                        if (otherChip != chip) {
-                            otherChip.setChecked(false);
-                        }
-                    }
-                    // Set the clicked chip as checked
-                    chip.setChecked(true);
-                    String chipText = chip.getText().toString();
-                    String abbr = chipText.length() > 3 ? chipText.substring(0, 1).toUpperCase() + chipText.substring(1, 3).toLowerCase() : chipText;
-                    selectedDay = abbr;
-                    etDaysOfWeek.setText(abbr);
-                    dialog.dismiss(); // Dismiss dialog after selection
-                });
             }
-        }
 
-        dialog.show();
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        editDuration.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().trim().isEmpty()) {
+                    clearError("duration");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        editPrice.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (!s.toString().trim().isEmpty()) {
+                    clearError("price");
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
     }
 
-    private void handleSave() {
-        if (!validateInputs()) return;
-        progressBar.setVisibility(View.VISIBLE);
-        try {
-            int durationValue = 1;
-            String durationText = duration.getText().toString().trim();
-            if (durationText.contains(" ")) {
-                durationValue = Integer.parseInt(durationText.split(" ")[0]);
-            } else {
-                try { durationValue = Integer.parseInt(durationText); } catch (Exception ignored) {}
-            }
-            Intent intent = new Intent(this, ConfirmCourseActivity.class);
-            intent.putExtra("courseName", courseName.getText().toString().trim());
-            intent.putExtra("time", time.getText().toString().trim());
-            intent.putExtra("capacity", capacity.getText().toString().trim());
-            intent.putExtra("duration", durationValue);
-            intent.putExtra("price", price.getText().toString().trim());
-            intent.putExtra("type", autoType.getText().toString().trim());
-            intent.putExtra("description", description.getText().toString().trim());
-            intent.putExtra("roomLocation", autoRoomLocation.getText().toString().trim());
-            intent.putExtra("daysOfWeek", selectedDay);
-            progressBar.postDelayed(() -> {
-                progressBar.setVisibility(View.GONE);
-                startActivity(intent);
-            }, 500);
-        } catch (Exception e) {
-            progressBar.setVisibility(View.GONE);
-            Snackbar.make(findViewById(android.R.id.content), "Error: " + e.getMessage(), Snackbar.LENGTH_LONG).show();
-        }
-    }
-
-    protected boolean validateInputs() {
-        if (ValidationUtils.isEmpty(courseName)) {
-            Toast.makeText(this, "Course name is required", Toast.LENGTH_SHORT).show();
+    private boolean validateDayOfWeek() {
+        String dayOfWeek = spinnerDayOfWeek.getText().toString().trim();
+        if (dayOfWeek.isEmpty()) {
+            errors.put("dayOfWeek", "Day of week is required");
+            ToastHelper.showErrorToast(this, "Please select a day of the week");
             return false;
         }
-        if (etDaysOfWeek.getText().toString().isEmpty()) {
-            Snackbar.make(findViewById(android.R.id.content), "Please select a day of the week.", Snackbar.LENGTH_SHORT).show();
-            return false;
-        }
-        if (ValidationUtils.isEmpty(time)) {
-            Toast.makeText(this, "Time is required", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (ValidationUtils.isEmpty(duration)) {
-            Toast.makeText(this, "Duration is required", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (autoType.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "Type is required", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (ValidationUtils.isEmpty(capacity)) {
-            Toast.makeText(this, "Capacity is required", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (autoRoomLocation.getText().toString().trim().isEmpty()) {
-            Toast.makeText(this, "Room location is required", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (ValidationUtils.isEmpty(price)) {
-            Toast.makeText(this, "Price is required", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (!ValidationUtils.isValidNumber(capacity)) {
-            Toast.makeText(this, "Capacity must be a valid number", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (!isValidDuration(duration)) {
-            Toast.makeText(this, "Duration must be 1-60", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (!ValidationUtils.isValidNumber(price)) {
-            Toast.makeText(this, "Price must be a valid number", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+        clearError("dayOfWeek");
         return true;
     }
 
-    private boolean isValidDuration(EditText durationField) {
-        String durationText = durationField.getText().toString().trim();
-        if (durationText.contains(" ")) {
-            durationText = durationText.split(" ")[0];
-        }
-        try {
-            int value = Integer.parseInt(durationText);
-            return value >= 1 && value <= 60;
-        } catch (Exception e) {
+    private boolean validateTime() {
+        String time = editTime.getText().toString().trim();
+        if (time.isEmpty()) {
+            errors.put("time", "Time is required");
+            ToastHelper.showErrorToast(this, "Please select a class time");
             return false;
         }
+        clearError("time");
+        return true;
     }
 
-    private void addClearErrorOnInput(EditText field, TextInputLayout til) {
-        field.addTextChangedListener(new TextWatcher() {
-            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (til != null) til.setError(null);
+    private boolean validateType() {
+        String type = spinnerType.getText().toString().trim();
+        if (type.isEmpty()) {
+            errors.put("type", "Class type is required");
+            ToastHelper.showErrorToast(this, "Please select a class type");
+            return false;
+        }
+        clearError("type");
+        return true;
+    }
+
+    private boolean validateCapacity() {
+        String capacityStr = editCapacity.getText().toString().trim();
+        if (capacityStr.isEmpty()) {
+            errors.put("capacity", "Capacity is required");
+            ToastHelper.showErrorToast(this, "Please enter a valid capacity (positive number)");
+            return false;
+        }
+        try {
+            int capacity = Integer.parseInt(capacityStr);
+            if (capacity <= 0) {
+                errors.put("capacity", "Capacity must be a positive number");
+                ToastHelper.showErrorToast(this, "Capacity must be a positive number");
+                return false;
             }
-            @Override public void afterTextChanged(Editable s) {}
+        } catch (NumberFormatException e) {
+            errors.put("capacity", "Capacity must be a valid number");
+            ToastHelper.showErrorToast(this, "Capacity must be a valid number");
+            return false;
+        }
+        clearError("capacity");
+        return true;
+    }
+
+    private boolean validateDuration() {
+        String durationStr = editDuration.getText().toString().trim();
+        if (durationStr.isEmpty()) {
+            errors.put("duration", "Duration is required");
+            ToastHelper.showErrorToast(this, "Please enter a valid duration (positive number)");
+            return false;
+        }
+        try {
+            int duration = Integer.parseInt(durationStr);
+            if (duration <= 0) {
+                errors.put("duration", "Duration must be a positive number");
+                ToastHelper.showErrorToast(this, "Duration must be a positive number");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            errors.put("duration", "Duration must be a valid number");
+            ToastHelper.showErrorToast(this, "Duration must be a valid number");
+            return false;
+        }
+        clearError("duration");
+        return true;
+    }
+
+    private boolean validatePrice() {
+        String priceStr = editPrice.getText().toString().trim();
+        if (priceStr.isEmpty()) {
+            errors.put("price", "Price is required");
+            ToastHelper.showErrorToast(this, "Please enter a valid price (positive number)");
+            return false;
+        }
+        try {
+            double price = Double.parseDouble(priceStr);
+            if (price <= 0) {
+                errors.put("price", "Price must be a positive number");
+                ToastHelper.showErrorToast(this, "Price must be a positive number");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            errors.put("price", "Price must be a valid number");
+            ToastHelper.showErrorToast(this, "Price must be a valid number");
+            return false;
+        }
+        clearError("price");
+        return true;
+    }
+
+    private boolean validateForm() {
+        boolean isValid = true;
+        
+        // Validate each field in order
+        if (!validateDayOfWeek()) isValid = false;
+        if (!validateTime()) isValid = false;
+        if (!validateType()) isValid = false;
+        if (!validateCapacity()) isValid = false;
+        if (!validateDuration()) isValid = false;
+        if (!validatePrice()) isValid = false;
+        
+        return isValid;
+    }
+
+    private void showErrors() {
+        // Only show error card if there are errors
+        if (!errors.isEmpty()) {
+            cardError.setVisibility(View.VISIBLE);
+            tvErrorMessage.setText("Please fix the errors above before continuing.");
+        } else {
+            cardError.setVisibility(View.GONE);
+        }
+    }
+
+    private void clearError(String fieldName) {
+        errors.remove(fieldName);
+        if (errors.isEmpty()) {
+            cardError.setVisibility(View.GONE);
+        }
+    }
+
+    private void clearAllErrors() {
+        errors.clear();
+        cardError.setVisibility(View.GONE);
+    }
+    
+    private void setupClickListeners() {
+        // Time picker
+        editTime.setOnClickListener(v -> showTimePicker());
+        editTime.setFocusable(false);
+        editTime.setClickable(true);
+        
+        // Add focus listeners for toast messages
+        setupFocusListeners();
+        
+        // Buttons
+        btnSave.setOnClickListener(v -> handleSave());
+        btnCancel.setOnClickListener(v -> finish());
+    }
+    
+    private void setupFocusListeners() {
+        // Day of week focus - show contextual help only when needed
+        spinnerDayOfWeek.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                ToastHelper.showContextualHelp(this, "day_of_week", "Select the day of the week for this class");
+            }
+        });
+        
+        // Time focus - show contextual help only when needed
+        editTime.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                ToastHelper.showContextualHelp(this, "time", "Tap to select the class time");
+            }
+        });
+        
+        // Class type focus - show contextual help only when needed
+        spinnerType.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                ToastHelper.showContextualHelp(this, "class_type", "Choose the type of yoga class");
+            }
+        });
+        
+        // Capacity focus - show contextual help only when needed
+        editCapacity.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                ToastHelper.showContextualHelp(this, "capacity", "Enter the maximum number of students (e.g., 20)");
+            }
+        });
+        
+        // Duration focus - show contextual help only when needed
+        editDuration.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                ToastHelper.showContextualHelp(this, "duration", "Enter class duration in minutes (e.g., 60)");
+            }
+        });
+        
+        // Price focus - show contextual help only when needed
+        editPrice.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                ToastHelper.showContextualHelp(this, "price", "Enter the class price in pounds (e.g., 15.00)");
+            }
+        });
+        
+        // Difficulty focus - show contextual help only when needed
+        spinnerDifficulty.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                ToastHelper.showContextualHelp(this, "difficulty", "Select the difficulty level (optional)");
+            }
+        });
+        
+        // Location focus - show contextual help only when needed
+        editRoomLocation.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                ToastHelper.showContextualHelp(this, "location", "Enter the class location (e.g., Studio A)");
+            }
+        });
+        
+        // Instructor focus - show contextual help only when needed
+        editInstructor.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                ToastHelper.showContextualHelp(this, "instructor", "Enter the instructor name (optional)");
+            }
+        });
+        
+        // Description focus - show contextual help only when needed
+        editDescription.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                ToastHelper.showContextualHelp(this, "description", "Add class description and special notes (optional)");
+            }
         });
     }
-
-    private void showError(String message) {
-        Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
+    
+    private void showTimePicker() {
+        TimePickerDialog timePickerDialog = new TimePickerDialog(
+            this,
+            (view, hourOfDay, minute) -> {
+                String time = String.format(Locale.UK, "%02d:%02d", hourOfDay, minute);
+                editTime.setText(time);
+                clearError("time");
+            },
+            9, 0, true
+        );
+        timePickerDialog.show();
+    }
+    
+    private void handleSave() {
+        if (!validateForm()) {
+            showErrors();
+            return;
+        }
+        
+        showConfirmationDialog();
+    }
+    
+    private void showConfirmationDialog() {
+        // Create confirmation dialog with course details
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Confirm Class Details");
+        
+        // Create confirmation view
+        View confirmView = LayoutInflater.from(this).inflate(R.layout.dialog_confirm_course, null);
+        
+        // Populate confirmation details
+        TextView tvConfirmDay = confirmView.findViewById(R.id.tvConfirmDay);
+        TextView tvConfirmTime = confirmView.findViewById(R.id.tvConfirmTime);
+        TextView tvConfirmType = confirmView.findViewById(R.id.tvConfirmType);
+        TextView tvConfirmDuration = confirmView.findViewById(R.id.tvConfirmDuration);
+        TextView tvConfirmCapacity = confirmView.findViewById(R.id.tvConfirmCapacity);
+        TextView tvConfirmPrice = confirmView.findViewById(R.id.tvConfirmPrice);
+        TextView tvConfirmDifficulty = confirmView.findViewById(R.id.tvConfirmDifficulty);
+        TextView tvConfirmLocation = confirmView.findViewById(R.id.tvConfirmLocation);
+        TextView tvConfirmInstructor = confirmView.findViewById(R.id.tvConfirmInstructor);
+        TextView tvConfirmDescription = confirmView.findViewById(R.id.tvConfirmDescription);
+        
+        tvConfirmDay.setText(spinnerDayOfWeek.getText().toString());
+        tvConfirmTime.setText(editTime.getText().toString());
+        tvConfirmType.setText(spinnerType.getText().toString());
+        tvConfirmDuration.setText(editDuration.getText().toString() + " minutes");
+        tvConfirmCapacity.setText(editCapacity.getText().toString() + " people");
+        tvConfirmPrice.setText("£" + editPrice.getText().toString());
+        
+        String difficulty = spinnerDifficulty.getText().toString();
+        if (!difficulty.isEmpty()) {
+            tvConfirmDifficulty.setVisibility(View.VISIBLE);
+            tvConfirmDifficulty.setText(difficulty);
+        } else {
+            tvConfirmDifficulty.setVisibility(View.GONE);
+        }
+        
+        String location = editRoomLocation.getText().toString();
+        if (!location.isEmpty()) {
+            tvConfirmLocation.setVisibility(View.VISIBLE);
+            tvConfirmLocation.setText(location);
+        } else {
+            tvConfirmLocation.setVisibility(View.GONE);
+        }
+        
+        String instructor = editInstructor.getText().toString();
+        if (!instructor.isEmpty()) {
+            tvConfirmInstructor.setVisibility(View.VISIBLE);
+            tvConfirmInstructor.setText(instructor);
+        } else {
+            tvConfirmInstructor.setVisibility(View.GONE);
+        }
+        
+        String description = editDescription.getText().toString();
+        if (!description.isEmpty()) {
+            tvConfirmDescription.setVisibility(View.VISIBLE);
+            tvConfirmDescription.setText(description);
+        } else {
+            tvConfirmDescription.setVisibility(View.GONE);
+        }
+        
+        builder.setView(confirmView);
+        builder.setPositiveButton("Confirm & Save", (dialog, which) -> saveCourse());
+        builder.setNegativeButton("Edit Details", null);
+        
+        builder.show();
+    }
+    
+    private void saveCourse() {
+        progressBar.setVisibility(View.VISIBLE);
+        btnSave.setEnabled(false);
+        
+        // Create course object
+        YogaCourse course = new YogaCourse(
+            spinnerDayOfWeek.getText().toString(),
+            editTime.getText().toString(),
+            Integer.parseInt(editCapacity.getText().toString()),
+            Integer.parseInt(editDuration.getText().toString()),
+            Double.parseDouble(editPrice.getText().toString()),
+            spinnerType.getText().toString(),
+            editDescription.getText().toString().trim(),
+            editRoomLocation.getText().toString().trim(),
+            editInstructor.getText().toString().trim(),
+            spinnerDifficulty.getText().toString().trim()
+        );
+        
+        // Save to database
+        new Thread(() -> {
+            try {
+                courseDao.insert(course);
+                runOnUiThread(() -> {
+                    progressBar.setVisibility(View.GONE);
+                    btnSave.setEnabled(true);
+                    ToastHelper.showSuccessToast(AddCourseActivity.this, "Class created successfully!");
+                    
+                    // Trigger auto-sync after successful save
+                    autoSyncService.triggerAutoSync();
+                    
+                    finish();
+                });
+        } catch (Exception e) {
+                runOnUiThread(() -> {
+                    progressBar.setVisibility(View.GONE);
+                    btnSave.setEnabled(true);
+                    ToastHelper.showErrorToast(AddCourseActivity.this, e.getMessage());
+                });
+            }
+        }).start();
+    }
+    
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (autoSyncService != null) {
+            autoSyncService.shutdown();
+        }
     }
 }

@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".YogaApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -29,8 +30,9 @@
         <activity android:name=".activities.UploadActivity" />
         <activity android:name=".activities.ClassInstanceActivity" />
         <activity android:name=".activities.AddInstanceActivity" />
-        <activity android:name=".activities.ConfirmCourseActivity" />
         <activity android:name=".activities.EditInstanceActivity" />
+
+        <activity android:name=".activities.DatabaseManagementActivity" />
     </application>
 
 </manifest>

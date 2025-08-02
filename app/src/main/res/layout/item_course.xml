@@ -5,92 +5,365 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
-    android:layout_marginTop="4dp"
+    android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
-    android:layout_marginBottom="4dp"
+    android:layout_marginBottom="8dp"
     app:cardCornerRadius="12dp"
-    app:cardElevation="2dp">
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/card"
+    app:strokeColor="@color/border"
+    app:strokeWidth="1dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:paddingBottom="20dp">
 
-        <ImageView
-            android:id="@+id/ivOverflowMenu"
-            android:layout_width="wrap_content"
+        <!-- Header Section: Title + Difficulty Badge + Price -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:contentDescription="More options"
-            android:padding="8dp"
-            android:src="@android:drawable/ic_menu_more"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:orientation="horizontal"
+            android:layout_marginBottom="12dp">
 
-        <TextView
-            android:id="@+id/tvCourseTitle"
-            android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginBottom="4dp">
+
+                    <TextView
+                        android:id="@+id/tvCourseTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/foreground"
+                        tools:text="Aerial Yoga" />
+
+                    <TextView
+                        android:id="@+id/tvDifficultyBadge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:background="@drawable/badge_background"
+                        android:paddingStart="8dp"
+                        android:paddingTop="2dp"
+                        android:paddingEnd="8dp"
+                        android:paddingBottom="2dp"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/yellow_300"
+                        android:visibility="visible"
+                        tools:text="Intermediate"
+                        tools:visibility="visible" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/tvPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary"
+                    tools:text="£123" />
+
+                <TextView
+                    android:id="@+id/tvDuration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textColor="@color/muted_foreground"
+                    tools:text="21 min" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Course Details Grid -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:textAppearance="?attr/textAppearanceTitleMedium"
-            android:textColor="?attr/colorOnSurface"
-            app:layout_constraintEnd_toStartOf="@+id/tvCoursePrice"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Flow Yoga" />
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp">
 
-        <TextView
-            android:id="@+id/tvCoursePrice"
-            android:layout_width="wrap_content"
+            <!-- Row 1: Day and Time -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_calendar"
+                        app:tint="@color/muted_foreground" />
+
+                    <TextView
+                        android:id="@+id/tvCourseSchedule"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:textSize="13sp"
+                        android:textColor="@color/foreground"
+                        tools:text="Tuesday" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_clock"
+                        app:tint="@color/muted_foreground" />
+
+                    <TextView
+                        android:id="@+id/tvCourseTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:textSize="13sp"
+                        android:textColor="@color/foreground"
+                        tools:text="00:59" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Row 2: Capacity and Location -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="8dp">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_people"
+                        app:tint="@color/muted_foreground" />
+
+                    <TextView
+                        android:id="@+id/tvCapacity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:textSize="13sp"
+                        android:textColor="@color/foreground"
+                        tools:text="Capacity: 20" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_map_pin"
+                        app:tint="@color/muted_foreground" />
+
+                    <TextView
+                        android:id="@+id/tvLocation"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:textSize="13sp"
+                        android:textColor="@color/foreground"
+                        tools:text="Studio B" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Row 3: Instructor -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_star"
+                    app:tint="@color/muted_foreground" />
+
+                <TextView
+                    android:id="@+id/tvInstructor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:textSize="13sp"
+                    android:textColor="@color/foreground"
+                    tools:text="Instructor: hiu" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Course Description Info -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceTitleMedium"
-            android:textColor="?attr/colorPrimary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="£15.00" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginBottom="12dp"
+            android:visibility="gone">
 
-        <TextView
-            android:id="@+id/tvCourseType"
-            android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_book_open"
+                app:tint="@color/muted_foreground" />
+
+            <TextView
+                android:id="@+id/tvAdditionalInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:textSize="13sp"
+                android:textColor="@color/foreground"
+                tools:text="A dynamic flow class focusing on breath and movement" />
+
+        </LinearLayout>
+
+        <!-- Instances Summary -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="?attr/colorSecondary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvCourseTitle"
-            tools:text="Aerial Yoga" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:background="@color/input_background"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:layout_marginBottom="16dp">
 
-        <TextView
-            android:id="@+id/tvCourseSchedule"
-            android:layout_width="0dp"
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/ic_instances"
+                app:tint="@color/muted_foreground" />
+
+            <TextView
+                android:id="@+id/tvInstancesCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:textSize="12sp"
+                android:textColor="@color/muted_foreground"
+                tools:text="0 total instances" />
+
+        </LinearLayout>
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            app:drawableStartCompat="@drawable/ic_calendar"
-            app:drawableTint="?attr/colorOnSurfaceVariant"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvCourseType"
-            tools:text="Monday @ 10:00" />
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="4dp">
 
-        <TextView
-            android:id="@+id/tvCourseDetails"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:drawablePadding="8dp"
-            android:gravity="center_vertical"
-            android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            app:drawableStartCompat="@drawable/ic_people"
-            app:drawableTint="?attr/colorOnSurfaceVariant"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tvCourseSchedule"
-            tools:text="60 min • 15 people" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnViewInstances"
+                style="@style/Widget.YogaCourse.Button.Outline.Compact"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:paddingHorizontal="4dp"
+                android:text="INSTANCES"
+                android:textAllCaps="true"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:enabled="true"
+                app:icon="@drawable/ic_instances"
+                app:iconGravity="textStart"
+                app:iconPadding="2dp"
+                app:iconSize="10dp"
+                app:cornerRadius="6dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnEdit"
+                style="@style/Widget.YogaCourse.Button.Outline.Compact"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:layout_marginEnd="6dp"
+                android:paddingHorizontal="4dp"
+                android:text="EDIT"
+                android:textAllCaps="true"
+                android:textSize="9sp"
+                android:textStyle="bold"
+                app:icon="@drawable/ic_edit"
+                app:iconGravity="textStart"
+                app:iconPadding="2dp"
+                app:iconSize="10dp"
+                app:cornerRadius="6dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnDelete"
+                style="@style/Widget.YogaCourse.Button.Compact"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:backgroundTint="@color/destructive"
+                android:text=""
+                app:cornerRadius="6dp"
+                app:icon="@drawable/ic_trash"
+                app:iconGravity="textTop"
+                app:iconPadding="0dp"
+                app:iconSize="14dp"
+                app:iconTint="@color/white"
+                android:gravity="center" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 </com.google.android.material.card.MaterialCardView>

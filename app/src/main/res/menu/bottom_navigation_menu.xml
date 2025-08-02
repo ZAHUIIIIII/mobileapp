@@ -13,6 +13,10 @@
         android:icon="@drawable/ic_instances"
         android:title="Instances" />
     <item
+        android:id="@+id/nav_customer_bookings"
+        android:icon="@drawable/ic_people"
+        android:title="Bookings" />
+    <item
         android:id="@+id/nav_upload"
         android:icon="@drawable/ic_upload"
         android:title="Upload" />

@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background">
+
+    <!-- Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/background"
+        app:navigationIcon="@drawable/ic_arrow_back_24"
+        app:title="Database Management"
+        app:titleTextColor="@color/foreground" />
+
+    <!-- Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
+
+    <!-- Header -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="24dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_alert_triangle"
+            app:tint="@color/warning"
+            android:layout_marginEnd="12dp" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Database Management"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/foreground" />
+
+    </LinearLayout>
+
+    <!-- Warning Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@color/warning_background"
+        app:strokeColor="@color/warning"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="⚠️ Warning"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/warning"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Database reset operations will permanently delete data. This action cannot be undone. Please make sure you have backed up any important data before proceeding."
+                android:textSize="14sp"
+                android:textColor="@color/foreground"
+                android:lineSpacingExtra="2dp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Reset Options Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@color/card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Reset Options"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/foreground"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Reset All Data -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnResetAll"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Reset All Data"
+                android:textSize="14sp"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_trash"
+                app:iconSize="20dp"
+                app:iconGravity="textStart"
+                app:iconPadding="12dp"
+                app:cornerRadius="8dp"
+                android:backgroundTint="@color/danger"
+                android:textColor="@color/white"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Clear Database Completely -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnClearDatabase"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:text="Clear Database Completely"
+                android:textSize="14sp"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_trash"
+                app:iconSize="20dp"
+                app:iconGravity="textStart"
+                app:iconPadding="12dp"
+                app:cornerRadius="8dp"
+                android:backgroundTint="@color/destructive"
+                android:textColor="@color/white"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Reset Specific Tables -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnResetActivity"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="Reset Activity Data"
+                android:textSize="13sp"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_activity"
+                app:iconSize="18dp"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                app:cornerRadius="8dp"
+                android:backgroundTint="@color/background"
+                android:textColor="@color/foreground"
+                app:strokeColor="@color/border"
+                app:strokeWidth="1dp"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnResetCourses"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="Reset Course Data"
+                android:textSize="13sp"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_book_open"
+                app:iconSize="18dp"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                app:cornerRadius="8dp"
+                android:backgroundTint="@color/background"
+                android:textColor="@color/foreground"
+                app:strokeColor="@color/border"
+                app:strokeWidth="1dp"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnResetInstances"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="Reset Instance Data"
+                android:textSize="13sp"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_calendar"
+                app:iconSize="18dp"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                app:cornerRadius="8dp"
+                android:backgroundTint="@color/background"
+                android:textColor="@color/foreground"
+                app:strokeColor="@color/border"
+                app:strokeWidth="1dp"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Insert Sample Data -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnInsertSample"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="Insert Sample Data"
+                android:textSize="13sp"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_add"
+                app:iconSize="18dp"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                app:cornerRadius="8dp"
+                android:backgroundTint="@color/primary"
+                android:textColor="@color/primary_foreground"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Create Sample Activities -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnCreateSampleActivities"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="Create Sample Activities"
+                android:textSize="13sp"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_activity"
+                app:iconSize="18dp"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                app:cornerRadius="8dp"
+                android:backgroundTint="@color/secondary"
+                android:textColor="@color/white"
+                android:layout_marginBottom="8dp" />
+
+            <!-- Refresh Stats -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnRefreshStats"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:text="Refresh Statistics"
+                android:textSize="13sp"
+                android:textAllCaps="false"
+                app:icon="@drawable/ic_refresh"
+                app:iconSize="18dp"
+                app:iconGravity="textStart"
+                app:iconPadding="10dp"
+                app:cornerRadius="8dp"
+                android:backgroundTint="@color/secondary"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Database Statistics Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@color/card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Database Statistics"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/foreground"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Database Stats Text -->
+            <TextView
+                android:id="@+id/tvDatabaseStats"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Loading database statistics..."
+                android:textSize="13sp"
+                android:textColor="@color/muted_foreground"
+                android:fontFamily="monospace"
+                android:lineSpacingExtra="2dp"
+                android:minHeight="120dp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Status Card -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="12dp"
+        app:cardElevation="2dp"
+        app:cardBackgroundColor="@color/card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Status"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/foreground"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Progress Bar -->
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:visibility="gone"
+                android:layout_marginBottom="12dp" />
+
+            <!-- Status Text -->
+            <TextView
+                android:id="@+id/tvStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ready to perform database operations"
+                android:textSize="14sp"
+                android:textColor="@color/muted_foreground"
+                android:gravity="center"
+                android:minHeight="40dp" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    </ScrollView>
+
+</LinearLayout> 

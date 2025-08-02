@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     marginRight: 4,
     marginBottom: 4,
-    backgroundColor: '#e0e7ff', // default bg
   },
   default: {
     backgroundColor: '#e0e7ff', // blue-100

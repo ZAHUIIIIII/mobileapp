@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, RefreshControl } from 'react-native';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import Button from '../components/ui/button';
 import { Badge } from '@components/ui/badge';
 import { FontAwesome } from '@expo/vector-icons';
-import { fetchClasses } from '../services/firebase';
-import { Picker } from '@react-native-picker/picker';
+import { fetchClassesWithFreshness, isDataFresh } from '../services/firebase';
+import { useAppContext } from '../context/AppContext';
 
 const daysOfWeek = [
   'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'
@@ -31,34 +31,104 @@ const getDayAbbr = (day) => day ? day.slice(0, 3) : '';
 export default function ClassBrowser({ onAddToCart }) {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [dataSource, setDataSource] = useState(''); // Track data source
+  const [dataFreshness, setDataFreshness] = useState(null); // Track data freshness
+  const [lastUpdate, setLastUpdate] = useState(null); // Track last update time
   const [selectedDays, setSelectedDays] = useState([]); // instead of selectedDay
   const [selectedTime, setSelectedTime] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [notification, setNotification] = useState(null);
 
-  useEffect(() => {
-    async function loadClasses() {
-      setLoading(true);
-      const data = await fetchClasses();
-      // Flatten to a list of instance cards
-      const classList = [];
-      if (data && typeof data === 'object') {
-        Object.values(data).forEach(item => {
-          const course = item.courseInfo;
-          if (item.instances) {
-            Object.values(item.instances).forEach(instance => {
-              classList.push({
-                ...course,      // course fields (type, teacher, etc.)
-                ...instance     // instance fields (date, startTime, etc.)
-              });
-            });
-          }
-        });
+  const { cleanupStaleCartItems } = useAppContext();
+
+  // Notification component
+  const NotificationBanner = () => {
+    if (!notification) return null;
+    
+    return (
+      <View style={styles.notificationContainer}>
+        <Text style={styles.notificationText}>
+          {notification}
+        </Text>
+        <TouchableOpacity onPress={() => setNotification(null)}>
+          <Text style={styles.notificationClose}>✕</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+  const loadClasses = useCallback(async () => {
+    setLoading(true);
+    try {
+      console.log("Starting to load classes...");
+      const result = await fetchClassesWithFreshness();
+      console.log("Fetch result:", result);
+      
+      setClasses(result.classes || []);
+      setDataSource(result.dataSource);
+      setDataFreshness(result.isFresh);
+      setLastUpdate(result.lastUpdate);
+      
+      console.log(`Loaded ${result.classes?.length || 0} classes`);
+      console.log(`Data source: ${result.dataSource}`);
+      console.log(`Data fresh: ${result.isFresh}`);
+      
+      // Clean up stale cart items and show notification if needed
+      const removedItems = await cleanupStaleCartItems();
+      if (removedItems && removedItems.length > 0) {
+        console.log(`${removedItems.length} stale items removed from cart`);
+        setNotification(`${removedItems.length} class(es) removed from cart - no longer available`);
+        // Auto-hide notification after 5 seconds
+        setTimeout(() => setNotification(null), 5000);
       }
-      setClasses(classList);
+    } catch (error) {
+      console.error("Error loading classes:", error);
+      setDataSource('Error');
+      setDataFreshness(false);
+    } finally {
       setLoading(false);
     }
+  }, []); // Empty dependency array - load only once
+
+  useEffect(() => {
     loadClasses();
-  }, []);
+  }, []); // Empty dependency array - run only once on mount
+
+  // Auto-refresh completely removed to prevent endless loops
+  // Users can manually refresh using pull-to-refresh
+
+  const onRefresh = useCallback(async () => {
+    if (refreshing) return; // Prevent duplicate refresh calls
+    
+    setRefreshing(true);
+    
+    try {
+      console.log("Force refreshing data from Firebase...");
+      const result = await fetchClassesWithFreshness();
+      setClasses(result.classes || []);
+      setDataSource(result.dataSource);
+      setDataFreshness(result.isFresh);
+      setLastUpdate(result.lastUpdate);
+      
+      console.log(`Refreshed: ${result.classes?.length || 0} classes from ${result.dataSource}`);
+      
+      // Clean up stale cart items and show notification if needed
+      const removedItems = await cleanupStaleCartItems();
+      if (removedItems && removedItems.length > 0) {
+        console.log(`${removedItems.length} stale items removed from cart`);
+        setNotification(`${removedItems.length} class(es) removed from cart - no longer available`);
+        // Auto-hide notification after 5 seconds
+        setTimeout(() => setNotification(null), 5000);
+      }
+    } catch (error) {
+      console.error("Error refreshing classes:", error);
+      setDataSource('Error');
+      setDataFreshness(false);
+    } finally {
+      setRefreshing(false);
+    }
+  }, []); // Empty dependency array to prevent loops
 
   const filteredClasses = classes.filter((yogaClass) => {
     // Filter by day of week and time using instance date/time
@@ -70,36 +140,114 @@ export default function ClassBrowser({ onAddToCart }) {
     const dayMatch = selectedDays.length > 0
       ? selectedDays.map(getDayAbbr).includes(dayOfWeekAbbr)
       : true;
+    const searchMatch = searchQuery
+      ? (yogaClass.courseName || yogaClass.name || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (yogaClass.instructor || yogaClass.teacher || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (yogaClass.difficulty || '').toLowerCase().includes(searchQuery.toLowerCase())
+      : true;
 
-    // Keyword search (case-insensitive, partial match)
-    const keyword = searchQuery.trim().toLowerCase();
-    const keywordMatch = !keyword ||
-      (yogaClass.courseName && yogaClass.courseName.toLowerCase().includes(keyword)) ||
-      (yogaClass.teacher && yogaClass.teacher.toLowerCase().includes(keyword)) ||
-      (yogaClass.type && yogaClass.type.toLowerCase().includes(keyword));
-
-    return dayMatch && timeMatch && keywordMatch;
+    const isVisible = timeMatch && dayMatch && searchMatch;
+    
+    // Debug logging for first few classes
+    if (classes.indexOf(yogaClass) < 3) {
+      console.log(`Class ${yogaClass.courseName || yogaClass.name}:`, {
+        dayOfWeek,
+        dayOfWeekAbbr,
+        selectedDays: selectedDays.map(getDayAbbr),
+        dayMatch,
+        timeMatch,
+        searchMatch,
+        isVisible
+      });
+    }
+    
+    return isVisible;
   });
 
-  const getTypeColor = (type) => {
-    switch (type) {
-      case 'Flow Yoga':
-        return { backgroundColor: '#e0e7ff' };
-      case 'Aerial Yoga':
-        return { backgroundColor: '#ede9fe' };
-      case 'Family Yoga':
-        return { backgroundColor: '#dcfce7' };
-      default:
-        return { backgroundColor: '#f3f4f6' };
+  console.log(`Filtered classes: ${filteredClasses.length} out of ${classes.length} total classes`);
+  console.log(`Selected days: ${selectedDays.join(', ')}`);
+  console.log(`Selected time: ${selectedTime}`);
+  console.log(`Search query: ${searchQuery}`);
+
+  const getDifficultyColor = (difficulty) => {
+    switch (difficulty?.toLowerCase()) {
+      case 'beginner': return '#4CAF50';
+      case 'intermediate': return '#FF9800';
+      case 'advanced': return '#F44336';
+      default: return '#9E9E9E';
     }
   };
 
+  // Data status indicator component
+  const DataStatusIndicator = () => {
+    if (!dataSource || dataSource === 'Error') {
+      return (
+        <View style={styles.statusContainer}>
+          <Text style={[styles.statusText, styles.errorText]}>
+            ⚠️ Data source error
+          </Text>
+        </View>
+      );
+    }
+
+    const getStatusColor = () => {
+      if (dataFreshness === null) return '#9E9E9E';
+      return '#4CAF50'; // Always green since auto-refresh is disabled
+    };
+
+    const getStatusText = () => {
+      if (dataFreshness === null) return 'Checking data...';
+      return '🟢 Live data'; // Always show as live since auto-refresh is disabled
+    };
+
+    const formatLastUpdate = () => {
+      if (!lastUpdate) return 'Unknown';
+      const date = new Date(lastUpdate);
+      const now = new Date();
+      const diffMinutes = Math.floor((now - date) / (1000 * 60));
+      
+      if (diffMinutes < 1) return 'Just now';
+      if (diffMinutes < 60) return `${diffMinutes}m ago`;
+      if (diffMinutes < 1440) return `${Math.floor(diffMinutes / 60)}h ago`;
+      return `${Math.floor(diffMinutes / 1440)}d ago`;
+    };
+
+    return (
+      <View style={styles.statusContainer}>
+        <Text style={[styles.statusText, { color: getStatusColor() }]}>
+          {getStatusText()}
+        </Text>
+        <Text style={styles.lastUpdateText}>
+          Last update: {formatLastUpdate()}
+        </Text>
+        <Text style={styles.sourceText}>
+          Source: {dataSource}
+        </Text>
+      </View>
+    );
+  };
+
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView 
+      style={styles.container}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+    >
       <View style={styles.header}>
         <Text style={styles.title}>Available Classes</Text>
         <Text style={styles.subtitle}>Choose from our upcoming yoga sessions</Text>
+        {dataSource && (
+          <Text style={styles.dataSource}>Data from: {dataSource}</Text>
+        )}
       </View>
+      
+      {/* Data Status Indicator */}
+      <DataStatusIndicator />
+      
+      {/* Notification Banner */}
+      <NotificationBanner />
+      
       <TextInput
         style={{
           borderWidth: 1,
@@ -110,7 +258,7 @@ export default function ClassBrowser({ onAddToCart }) {
           marginBottom: 12,
           fontSize: 16,
         }}
-        placeholder="Search by class, teacher, or type"
+        placeholder="Search by class, teacher, or difficulty"
         value={searchQuery}
         onChangeText={setSearchQuery}
       />
@@ -186,11 +334,15 @@ export default function ClassBrowser({ onAddToCart }) {
                     <View style={styles.cardHeaderRow}>
                       <View>
                         <CardTitle style={styles.cardTitle}>{yogaClass.courseName}</CardTitle>
-                        <Text style={styles.teacher}>with {yogaClass.teacher}</Text>
+                        <Text style={styles.teacher}>with {yogaClass.instructor || yogaClass.teacher}</Text>
                       </View>
-                      <Badge style={[styles.badge, getTypeColor(yogaClass.type)]}>
-                        {yogaClass.type}
-                      </Badge>
+                      <View style={styles.badgeContainer}>
+                        {yogaClass.difficulty && (
+                          <Badge style={[styles.badge, styles.difficultyBadge, getDifficultyColor(yogaClass.difficulty)]}>
+                            {yogaClass.difficulty}
+                          </Badge>
+                        )}
+                      </View>
                     </View>
                   </CardHeader>
                   <CardContent style={styles.cardContent}>
@@ -207,7 +359,12 @@ export default function ClassBrowser({ onAddToCart }) {
                     <View style={styles.infoGridRow}>
                       <View style={styles.infoGridCol}>
                         <FontAwesome name="users" size={18} color="#888" />
-                        <Text style={styles.infoText}>{yogaClass.capacity} spots</Text>
+                        <Text style={styles.infoText}>
+                          {yogaClass.availableSpots !== undefined 
+                            ? `${yogaClass.availableSpots} available`
+                            : `${yogaClass.capacity} spots`
+                          }
+                        </Text>
                       </View>
                       <View style={styles.infoGridCol}>
                         <FontAwesome name="dollar" size={18} color="#888" />
@@ -233,6 +390,7 @@ export default function ClassBrowser({ onAddToCart }) {
           })}
         </View>
       )}
+      <NotificationBanner />
     </ScrollView>
   );
 }
@@ -241,11 +399,8 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
   header: { alignItems: 'center', marginVertical: 16 },
   title: { fontSize: 24, fontWeight: 'bold', marginBottom: 4 },
-  subtitle: { fontSize: 16, color: '#888' },
-  filterRow: { flexDirection: 'row', justifyContent: 'space-around', marginBottom: 16 },
-  pickerContainer: { flex: 1, alignItems: 'center' },
-  filterLabel: { fontSize: 14, marginBottom: 4 },
-  picker: { width: 120, height: 40 },
+  subtitle: { fontSize: 16, color: '#888', marginBottom: 4 },
+  dataSource: { fontSize: 12, color: '#666', fontStyle: 'italic' },
   loading: { textAlign: 'center', marginTop: 20, fontSize: 16 },
   classList: { paddingHorizontal: 8 },
   noClasses: { textAlign: 'center', color: '#888', marginTop: 20 },
@@ -255,7 +410,9 @@ const styles = StyleSheet.create({
   cardHeaderRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   cardTitle: { fontSize: 18, fontWeight: 'bold' },
   teacher: { fontSize: 14, color: '#888' },
-  badge: { alignSelf: 'flex-start', marginLeft: 8 },
+  badge: { alignSelf: 'flex-start', marginLeft: 4, marginBottom: 4 },
+  badgeContainer: { alignItems: 'flex-end' },
+  difficultyBadge: { marginTop: 4 },
   cardContent: { marginTop: 8 },
   infoGridRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10 },
   infoGridCol: { flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: 24 },
@@ -265,4 +422,52 @@ const styles = StyleSheet.create({
   description: { fontSize: 14, color: '#555', marginTop: 8 },
   comments: { fontSize: 14, color: '#2563eb', backgroundColor: '#dbeafe', padding: 6, borderRadius: 6, marginTop: 8 },
   addButton: { marginTop: 12 },
+  statusContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+    marginHorizontal: 16,
+    marginBottom: 12,
+  },
+  statusText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+  errorText: {
+    color: '#FF0000',
+  },
+  lastUpdateText: {
+    fontSize: 12,
+    color: '#666',
+    marginLeft: 10,
+  },
+  sourceText: {
+    fontSize: 12,
+    color: '#666',
+    marginLeft: 10,
+  },
+  notificationContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#4CAF50',
+    padding: 12,
+    borderRadius: 8,
+    marginHorizontal: 16,
+    marginBottom: 12,
+  },
+  notificationText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
+    flex: 1,
+  },
+  notificationClose: {
+    fontSize: 18,
+    color: '#fff',
+    fontWeight: 'bold',
+  },
 });

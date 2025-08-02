@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="8dp"
+    android:background="@color/card"
+    android:layout_margin="2dp">
+
+    <!-- Sync Type Icon -->
+    <ImageView
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:src="@drawable/ic_cloud"
+        app:tint="@color/primary"
+        android:layout_marginEnd="8dp" />
+
+    <!-- Sync Info -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvSyncType"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Manual Sync"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:textColor="@color/foreground"
+                tools:text="Manual Sync" />
+
+            <TextView
+                android:id="@+id/tvSyncStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Completed"
+                android:textSize="11sp"
+                android:textColor="@color/green_600"
+                android:background="@drawable/badge_background"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="2dp"
+                tools:text="Completed" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="2dp">
+
+            <TextView
+                android:id="@+id/tvSyncTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Dec 15, 14:30"
+                android:textSize="11sp"
+                android:textColor="@color/muted_foreground"
+                tools:text="Dec 15, 14:30" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvSyncDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="5 courses, 12 instances synced"
+            android:textSize="10sp"
+            android:textColor="@color/muted_foreground"
+            android:layout_marginTop="2dp"
+            android:visibility="gone"
+            tools:text="5 courses, 12 instances synced"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+
+</LinearLayout> 

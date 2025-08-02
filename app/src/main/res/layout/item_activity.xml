@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp"
+    android:gravity="center_vertical"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- Activity Icon -->
+    <LinearLayout
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:background="@drawable/bg_activity_icon"
+        android:gravity="center"
+        android:layout_marginEnd="12dp">
+
+        <ImageView
+            android:id="@+id/ivActivityIcon"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:src="@drawable/ic_activity"
+            app:tint="@color/white" />
+
+    </LinearLayout>
+
+    <!-- Activity Content -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvActivityDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Course 'Yoga Basics' was created"
+            android:textSize="13sp"
+            android:textColor="@color/foreground"
+            android:maxLines="2"
+            android:ellipsize="end" />
+
+        <TextView
+            android:id="@+id/tvActivityTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2 hours ago"
+            android:textSize="11sp"
+            android:textColor="@color/muted_foreground"
+            android:layout_marginTop="2dp" />
+
+    </LinearLayout>
+
+    <!-- Activity Type Badge -->
+    <TextView
+        android:id="@+id/tvActivityType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="COURSE"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@drawable/bg_activity_badge"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="4dp"
+        android:layout_marginStart="8dp" />
+
+</LinearLayout> 

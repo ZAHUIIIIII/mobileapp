@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base Styles -->
+    <style name="Widget">
+        <!-- Fallback base style for compatibility -->
+    </style>
+    
+    <style name="Widget.YogaCourse">
+        <!-- Fallback base style, intentionally left minimal -->
+    </style>
+    
+    <!-- Enhanced Button Styles - Smaller sizes -->
+    <style name="Widget.YogaCourse.Button" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/primary</item>
+        <item name="android:textColor">@color/primary_foreground</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="Widget.YogaCourse.Button.Outline" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:backgroundTint">@color/background</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="strokeColor">@color/primary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <!-- Compact button style for course item buttons -->
+    <style name="Widget.YogaCourse.Button.Outline.Compact" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:backgroundTint">@color/background</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="strokeColor">@color/primary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">6dp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingEnd">4dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:minHeight">36dp</item>
+        <item name="android:textSize">9sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <!-- Compact solid button style for course item buttons -->
+    <style name="Widget.YogaCourse.Button.Compact" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/primary</item>
+        <item name="android:textColor">@color/primary_foreground</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">6dp</item>
+        <item name="android:paddingStart">4dp</item>
+        <item name="android:paddingEnd">4dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:minHeight">36dp</item>
+        <item name="android:textSize">9sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <style name="Widget.YogaCourse.Button.Secondary" parent="Widget.MaterialComponents.Button">
+        <item name="android:backgroundTint">@color/secondary</item>
+        <item name="android:textColor">@color/secondary_foreground</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    
+    <!-- Enhanced Card Style - Smaller sizes -->
+    <style name="Widget.YogaCourse.Card">
+        <item name="cardBackgroundColor">@color/card</item>
+        <item name="cardElevation">2dp</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="contentPadding">12dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+    
+    <style name="Widget.YogaCourse.Card.Stats">
+        <item name="cardBackgroundColor">@color/card</item>
+        <item name="cardElevation">1dp</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="contentPadding">16dp</item>
+        <item name="android:minHeight">80dp</item>
+    </style>
+    
+    <style name="Widget.YogaCourse.Card.Action">
+        <item name="cardBackgroundColor">@color/card</item>
+        <item name="cardElevation">1dp</item>
+        <item name="cardCornerRadius">8dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="contentPadding">12dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+    </style>
+    
+    <!-- Alert Style -->
+    <style name="Widget.YogaCourse.Alert" parent="Widget.MaterialComponents.Snackbar">
+        <item name="backgroundTint">@color/destructive</item>
+        <item name="android:textColor">@color/destructive_foreground</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+    
+    <!-- Dialog Style -->
+    <style name="Widget.YogaCourse.Dialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="android:background">@color/card</item>
+        <item name="android:textColor">@color/card_foreground</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+    
+    <!-- Tabs Style -->
+    <style name="Widget.YogaCourse.TabLayout" parent="Widget.MaterialComponents.TabLayout">
+        <item name="tabIndicatorColor">@color/primary</item>
+        <item name="tabSelectedTextColor">@color/primary</item>
+        <item name="tabTextColor">@color/muted_foreground</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabIndicatorFullWidth">false</item>
+        <item name="tabMode">fixed</item>
+        <item name="tabGravity">fill</item>
+    </style>
+    
+    <!-- Enhanced Input Styles - Smaller sizes -->
+    <style name="Widget.YogaCourse.TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxBackgroundColor">@color/input_background</item>
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="hintTextColor">@color/muted_foreground</item>
+        <item name="boxCornerRadiusTopStart">6dp</item>
+        <item name="boxCornerRadiusTopEnd">6dp</item>
+        <item name="boxCornerRadiusBottomStart">6dp</item>
+        <item name="boxCornerRadiusBottomEnd">6dp</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+    </style>
+    
+    <style name="Widget.YogaCourse.TextInputLayout.Outlined" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxBackgroundColor">@color/background</item>
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="hintTextColor">@color/muted_foreground</item>
+        <item name="boxCornerRadiusTopStart">6dp</item>
+        <item name="boxCornerRadiusTopEnd">6dp</item>
+        <item name="boxCornerRadiusBottomStart">6dp</item>
+        <item name="boxCornerRadiusBottomEnd">6dp</item>
+        <item name="boxStrokeWidth">1dp</item>
+        <item name="boxStrokeWidthFocused">1dp</item>
+    </style>
+    
+    <style name="Widget.YogaCourse.TextInputLayout.ExposedDropdownMenu" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxBackgroundColor">@color/input_background</item>
+        <item name="boxStrokeColor">@color/primary</item>
+        <item name="android:textColor">@color/primary</item>
+        <item name="hintTextColor">@color/muted_foreground</item>
+        <item name="boxCornerRadiusTopStart">6dp</item>
+        <item name="boxCornerRadiusTopEnd">6dp</item>
+        <item name="boxCornerRadiusBottomStart">6dp</item>
+        <item name="boxCornerRadiusBottomEnd">6dp</item>
+    </style>
+    
+    <style name="Widget.YogaCourse.AutoCompleteTextView.OutlinedBox" parent="Widget.MaterialComponents.AutoCompleteTextView.OutlinedBox">
+        <item name="android:textColor">@color/primary</item>
+        <item name="android:background">@color/input_background</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <!-- Checkbox Style -->
+    <style name="Widget.YogaCourse.CheckBox" parent="Widget.MaterialComponents.CompoundButton.CheckBox">
+        <item name="buttonTint">@color/primary</item>
+        <item name="android:textColor">@color/foreground</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <!-- Switch Style -->
+    <style name="Widget.YogaCourse.Switch" parent="Widget.MaterialComponents.CompoundButton.Switch">
+        <item name="thumbTint">@color/primary</item>
+        <item name="trackTint">@color/switch_background</item>
+        <item name="android:textColor">@color/foreground</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    
+    <!-- ProgressBar Style -->
+    <style name="Widget.YogaCourse.ProgressBar">
+        <item name="android:indeterminateTint">@color/primary</item>
+        <item name="android:progressTint">@color/primary</item>
+        <item name="android:progressBackgroundTint">@color/muted</item>
+    </style>
+    
+    <!-- Enhanced Typography - Smaller sizes -->
+    <style name="TextAppearance.YogaCourse.H1" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/foreground</item>
+        <item name="android:letterSpacing">-0.02</item>
+    </style>
+    
+    <style name="TextAppearance.YogaCourse.H2" parent="TextAppearance.MaterialComponents.Headline2">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/foreground</item>
+        <item name="android:letterSpacing">-0.01</item>
+    </style>
+    
+    <style name="TextAppearance.YogaCourse.H3" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/foreground</item>
+    </style>
+    
+    <style name="TextAppearance.YogaCourse.H4" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/foreground</item>
+    </style>
+    
+    <style name="TextAppearance.YogaCourse.Body" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/foreground</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
+    </style>
+    
+    <style name="TextAppearance.YogaCourse.Body.Small" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/muted_foreground</item>
+        <item name="android:lineSpacingMultiplier">1.3</item>
+    </style>
+    
+    <style name="TextAppearance.YogaCourse.Label" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">11sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/muted_foreground</item>
+        <item name="android:letterSpacing">0.05</item>
+    </style>
+    
+    <style name="TextAppearance.YogaCourse.Button" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@color/primary_foreground</item>
+        <item name="android:letterSpacing">0.05</item>
+    </style>
+    
+    <style name="TextAppearance.YogaCourse.BottomNavigation" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:letterSpacing">0.01</item>
+        <item name="android:lineSpacingMultiplier">0.9</item>
+    </style>
+    
+
+    
+    <style name="TextAppearance.YogaCourse.Input" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textColor">@color/foreground</item>
+    </style>
+    
+    <!-- Badge Styles - Smaller -->
+    <style name="Widget.YogaCourse.Badge">
+        <item name="android:background">@color/accent</item>
+        <item name="android:textColor">@color/accent_foreground</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:paddingStart">8dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:paddingBottom">4dp</item>
+        <item name="android:minHeight">20dp</item>
+    </style>
+    
+    <!-- Divider Style -->
+    <style name="Widget.YogaCourse.Divider">
+        <item name="android:background">@color/border</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginStart">12dp</item>
+        <item name="android:layout_marginEnd">12dp</item>
+    </style>
+    
+    <!-- Custom Active Indicator for Bottom Navigation - Smaller -->
+    <style name="CustomActiveIndicator">
+        <item name="android:background">@color/primary</item>
+        <item name="cornerRadius">1dp</item>
+        <item name="android:layout_width">32dp</item>
+        <item name="android:layout_height">3dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:layout_marginBottom">6dp</item>
+    </style>
+    
+    <!-- Bottom Navigation Style -->
+    <style name="Widget.YogaCourse.BottomNavigation" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="itemIconTint">@color/bottom_nav_item_color</item>
+        <item name="itemTextColor">@color/bottom_nav_item_color</item>
+        <item name="itemIconSize">20dp</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="android:background">@drawable/bottom_nav_background</item>
+        <item name="backgroundTint">@null</item>
+        <item name="elevation">8dp</item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.YogaCourse.BottomNavigation</item>
+        <item name="itemTextAppearanceInactive">@style/TextAppearance.YogaCourse.BottomNavigation</item>
+        <item name="itemRippleColor">@color/primary_10</item>
+        <item name="itemPaddingTop">2dp</item>
+        <item name="itemPaddingBottom">2dp</item>
+    </style>
+</resources> 

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/md_theme_background">
+    android:background="@color/background">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
-        android:title="Edit Class Instance"
+        android:title="Edit Instance"
         android:titleTextColor="?attr/colorOnPrimary"
         app:navigationIcon="@drawable/ic_arrow_back_24"
         app:titleCentered="true"/>
@@ -19,12 +20,15 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:fillViewport="true">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:padding="12dp">
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -36,225 +40,135 @@
                 android:contentDescription="Loading indicator"
                 android:importantForAccessibility="yes"/>
 
+            <!-- Title -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:text="Edit Instance"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/foreground" />
+
+            <!-- Instance Details Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="?attr/colorSurface">
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="1dp"
+                app:cardBackgroundColor="@color/card">
 
                 <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="24dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
 
-                    <!-- Section: Course Information (Read-only) -->
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Course Information"
-                        android:textAppearance="?attr/textAppearanceTitleMedium"
-                        android:textColor="?attr/colorPrimary"
-                        android:paddingBottom="12dp"/>
+                        android:layout_marginBottom="12dp"
+                        android:text="Instance Details"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/foreground" />
 
+                    <!-- Class Selection -->
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilCourse"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Course Name"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorPrimary"
-                        android:layout_marginBottom="8dp">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/tvCourseName"
+                        android:layout_marginBottom="12dp"
+                        android:hint="Select Course *"
+                        android:minHeight="48dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/autoCourse"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:minHeight="40dp"
+                            android:textSize="14sp"
                             android:inputType="none"
-                            android:focusable="false"
-                            android:clickable="false"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textAppearance="?attr/textAppearanceBodyLarge"
-                            android:contentDescription="Course name for this session"/>
+                            android:padding="12dp" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Days of Week"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorPrimary"
-                        android:layout_marginBottom="8dp">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/tvCourseDaysOfWeek"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:focusable="false"
-                            android:clickable="false"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textAppearance="?attr/textAppearanceBodyLarge"
-                            android:contentDescription="Days of week for the selected course"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Time Range"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorPrimary"
-                        android:layout_marginBottom="8dp">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/tvCourseTimeRange"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:focusable="false"
-                            android:clickable="false"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textAppearance="?attr/textAppearanceBodyLarge"
-                            android:contentDescription="Time range for the selected course"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Room"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorPrimary"
-                        android:layout_marginBottom="8dp">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/tvCourseRoom"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:focusable="false"
-                            android:clickable="false"
-                            android:textColor="?attr/colorOnSurface"
-                            android:textAppearance="?attr/textAppearanceBodyLarge"
-                            android:contentDescription="Room for the selected course"/>
-                    </com.google.android.material.textfield.TextInputLayout>
-
+                    <!-- Date and Teacher Row -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        android:weightSum="2"
-                        android:layout_marginBottom="8dp">
+                        android:layout_marginBottom="12dp">
+
                         <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilDate"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:hint="Enrolled"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                            app:boxStrokeColor="?attr/colorPrimary"
-                            app:hintTextColor="?attr/colorPrimary"
-                            android:layout_marginEnd="4dp">
+                            android:layout_marginEnd="6dp"
+                            android:hint="Date *"
+                            android:minHeight="48dp"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/tvEnrolled"
+                                android:id="@+id/etDate"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:minHeight="40dp"
+                                android:textSize="14sp"
                                 android:inputType="none"
                                 android:focusable="false"
-                                android:clickable="false"
-                                android:textColor="?attr/colorOnSurface"
-                                android:textAppearance="?attr/textAppearanceBodyLarge"
-                                android:contentDescription="Number of enrolled students"/>
+                                android:clickable="true"
+                                android:padding="12dp" />
+
                         </com.google.android.material.textfield.TextInputLayout>
 
                         <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilTeacher"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:hint="Capacity"
-                            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                            app:boxStrokeColor="?attr/colorPrimary"
-                            app:hintTextColor="?attr/colorPrimary"
-                            android:layout_marginStart="4dp">
+                            android:layout_marginStart="6dp"
+                            android:hint="Teacher *"
+                            android:minHeight="48dp"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
                             <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/tvCapacity"
+                                android:id="@+id/etTeacher"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:inputType="none"
-                                android:focusable="false"
-                                android:clickable="false"
-                                android:textColor="?attr/colorOnSurface"
-                                android:textAppearance="?attr/textAppearanceBodyLarge"
-                                android:contentDescription="Maximum capacity"/>
+                                android:minHeight="40dp"
+                                android:textSize="14sp"
+                                android:inputType="textPersonName"
+                                android:padding="12dp" />
+
                         </com.google.android.material.textfield.TextInputLayout>
+
                     </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
-                app:cardBackgroundColor="?attr/colorSurface">
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:padding="24dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <!-- Section: Instance Details (Editable) -->
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Instance Details"
-                        android:textAppearance="?attr/textAppearanceTitleMedium"
-                        android:textColor="?attr/colorPrimary"
-                        android:paddingBottom="12dp"/>
-
-                    <!-- Date -->
+                    <!-- Attendees -->
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilDate"
+                        android:id="@+id/tilAttendees"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Date"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                        app:endIconMode="custom"
-                        app:endIconDrawable="@drawable/ic_calendar"
-                        app:endIconContentDescription="Pick date"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorPrimary"
-                        app:endIconTint="?attr/colorPrimary"
-                        android:layout_marginBottom="8dp">
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etDate"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:focusable="false"
-                            android:clickable="true"
-                            android:textColor="?attr/colorOnSurface"
-                            android:contentDescription="Pick date for this session"/>
-                    </com.google.android.material.textfield.TextInputLayout>
+                        android:layout_marginBottom="12dp"
+                        android:hint="Attendees"
+                        android:minHeight="48dp"
+                        app:helperText="Max capacity: 0"
+                        app:helperTextEnabled="true"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-                    <!-- Teacher Name -->
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/tilTeacher"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Teacher Name"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorPrimary"
-                        android:layout_marginBottom="8dp">
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/etTeacher"
+                            android:id="@+id/editAttendees"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="textPersonName"
-                            android:textColor="?attr/colorOnSurface"
-                            android:contentDescription="Teacher name for this session"/>
+                            android:minHeight="40dp"
+                            android:textSize="14sp"
+                            android:inputType="number"
+                            android:padding="12dp" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <!-- Comments -->
@@ -263,61 +177,58 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Comments (Optional)"
-                        style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                        app:boxStrokeColor="?attr/colorPrimary"
-                        app:hintTextColor="?attr/colorPrimary"
-                        android:layout_marginBottom="8dp">
+                        android:minHeight="48dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etComments"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:minHeight="80dp"
+                            android:textSize="14sp"
                             android:inputType="textMultiLine"
-                            android:minLines="3"
-                            android:textColor="?attr/colorOnSurface"
-                            android:contentDescription="Comments for this session (optional)"/>
+                            android:minLines="2"
+                            android:maxLines="4"
+                            android:padding="12dp"
+                            android:gravity="top|start" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                 </LinearLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
-
-            <!-- Submit Button -->
+            <!-- Action Buttons -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="12dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:paddingBottom="16dp">
+                android:gravity="center"
+                android:layout_marginTop="6dp">
 
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnUpdateInstance"
+                    android:id="@+id/btnCancel"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="44dp"
                     android:layout_weight="1"
+                    android:layout_marginEnd="6dp"
+                    android:text="Cancel"
+                    android:textSize="14sp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSave"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="6dp"
                     android:text="Update Instance"
-                    style="@style/Widget.Material3.Button"
-                    app:backgroundTint="?attr/colorPrimary"
-                    app:cornerRadius="12dp"
-                    android:textColor="?attr/colorOnPrimary"
-                    android:layout_marginEnd="8dp"
-                    android:contentDescription="Update this class instance"/>
+                    android:textSize="14sp" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnDeleteInstance"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Delete Instance"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    app:strokeColor="?attr/colorError"
-                    app:strokeWidth="2dp"
-                    app:cornerRadius="12dp"
-                    android:textColor="?attr/colorError"
-                    android:layout_marginStart="8dp"
-                    android:contentDescription="Delete this class instance"/>
             </LinearLayout>
+
         </LinearLayout>
+
     </ScrollView>
+
 </LinearLayout>

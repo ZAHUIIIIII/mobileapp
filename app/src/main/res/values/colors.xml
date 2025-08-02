@@ -1,30 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="md_theme_primary">#006e2c</color>
+    <!-- Material Design 3 Theme Colors - Updated to match adminapp -->
+    <color name="md_theme_primary">#030213</color>
     <color name="md_theme_onPrimary">#ffffff</color>
-    <color name="md_theme_primaryContainer">#8ff7a6</color>
-    <color name="md_theme_onPrimaryContainer">#002108</color>
-    <color name="md_theme_secondary">#52634f</color>
-    <color name="md_theme_onSecondary">#ffffff</color>
-    <color name="md_theme_secondaryContainer">#d5e8cf</color>
-    <color name="md_theme_onSecondaryContainer">#101f10</color>
-    <color name="md_theme_tertiary">#39656a</color>
+    <color name="md_theme_primaryContainer">#1a1a2e</color>
+    <color name="md_theme_onPrimaryContainer">#ffffff</color>
+    <color name="md_theme_secondary">#f0f0f5</color>
+    <color name="md_theme_onSecondary">#030213</color>
+    <color name="md_theme_secondaryContainer">#e9ebef</color>
+    <color name="md_theme_onSecondaryContainer">#030213</color>
+    <color name="md_theme_tertiary">#8b5cf6</color>
     <color name="md_theme_onTertiary">#ffffff</color>
-    <color name="md_theme_tertiaryContainer">#bcebf0</color>
-    <color name="md_theme_onTertiaryContainer">#002023</color>
-    <color name="md_theme_error">#ba1a1a</color>
+    <color name="md_theme_tertiaryContainer">#f3e8ff</color>
+    <color name="md_theme_onTertiaryContainer">#030213</color>
+    <color name="md_theme_error">#d4183d</color>
     <color name="md_theme_onError">#ffffff</color>
-    <color name="md_theme_errorContainer">#ffdad6</color>
-    <color name="md_theme_onErrorContainer">#410002</color>
-    <color name="md_theme_background">#fcfdf6</color>
-    <color name="md_theme_onBackground">#1a1c19</color>
-    <color name="md_theme_surface">#fcfdf6</color>
-    <color name="md_theme_onSurface">#1a1c19</color>
-    <color name="md_theme_surfaceVariant">#dee5d9</color>
-    <color name="md_theme_onSurfaceVariant">#424940</color>
-    <color name="md_theme_outline">#72796f</color>
+    <color name="md_theme_errorContainer">#fef2f2</color>
+    <color name="md_theme_onErrorContainer">#030213</color>
+    <color name="md_theme_background">#ffffff</color>
+    <color name="md_theme_onBackground">#030213</color>
+    <color name="md_theme_surface">#ffffff</color>
+    <color name="md_theme_onSurface">#030213</color>
+    <color name="md_theme_surfaceVariant">#f4f5f7</color>
+    <color name="md_theme_onSurfaceVariant">#717182</color>
+    <color name="md_theme_outline">#e9ebef</color>
     <color name="md_theme_shadow">#000000</color>
-    <color name="md_theme_inverseSurface">#2f312d</color>
-    <color name="md_theme_inverseOnSurface">#f0f1eb</color>
-    <color name="md_theme_inversePrimary">#73da8c</color>
+    <color name="md_theme_inverseSurface">#030213</color>
+    <color name="md_theme_inverseOnSurface">#ffffff</color>
+    <color name="md_theme_inversePrimary">#f0f0f5</color>
+    
+    <!-- Modern Color System - Matching adminapp -->
+    <color name="background">#ffffff</color>
+    <color name="foreground">#030213</color>
+    <color name="card">#ffffff</color>
+    <color name="card_foreground">#030213</color>
+    <color name="primary">#030213</color>
+    <color name="primary_foreground">#ffffff</color>
+    <color name="primary_foreground_80">#ccffffff</color>
+    <color name="primary_foreground_20">#33ffffff</color>
+    <color name="primary_10">#f0f0f0</color>
+    <color name="secondary">#f0f0f5</color>
+    <color name="secondary_foreground">#030213</color>
+    <color name="muted">#ececf0</color>
+    <color name="muted_foreground">#717182</color>
+    <color name="accent">#e9ebef</color>
+    <color name="accent_foreground">#030213</color>
+    <color name="accent_50">#f4f5f7</color>
+    <color name="accent_light">#f8f9fa</color>
+    <color name="destructive">#d4183d</color>
+    <color name="destructive_foreground">#ffffff</color>
+    <color name="destructive_10">#fef2f2</color>
+    <color name="destructive_20">#33d4183d</color>
+    <color name="border">#1a000000</color>
+    
+    <!-- Enhanced Color Palette - Matching adminapp gradients -->
+    <color name="green_50">#f0fdf4</color>
+    <color name="green_100">#dcfce7</color>
+    <color name="green_200">#bbf7d0</color>
+    <color name="green_500">#22c55e</color>
+    <color name="green_600">#16a34a</color>
+    <color name="green_700">#15803d</color>
+    
+    <color name="blue_50">#eff6ff</color>
+    <color name="blue_100">#dbeafe</color>
+    <color name="blue_200">#bfdbfe</color>
+    <color name="blue_500">#3b82f6</color>
+    <color name="blue_600">#2563eb</color>
+    <color name="blue_700">#1d4ed8</color>
+    
+    <color name="purple_50">#faf5ff</color>
+    <color name="purple_100">#f3e8ff</color>
+    <color name="purple_200">#e9d5ff</color>
+    <color name="purple_500">#8b5cf6</color>
+    <color name="purple_600">#7c3aed</color>
+    <color name="purple_700">#6d28d9</color>
+    
+    <color name="orange_50">#fff7ed</color>
+    <color name="orange_100">#ffedd5</color>
+    <color name="orange_200">#fed7aa</color>
+    <color name="orange_500">#f97316</color>
+    <color name="orange_600">#ea580c</color>
+    <color name="orange_700">#c2410c</color>
+    
+    <color name="red_50">#fef2f2</color>
+    <color name="red_100">#fee2e2</color>
+    <color name="red_200">#fecaca</color>
+    <color name="red_500">#ef4444</color>
+    <color name="red_600">#dc2626</color>
+    <color name="red_700">#b91c1c</color>
+    
+    <color name="yellow_300">#fde047</color>
+    <color name="card_95">#f2ffffff</color>
+    <color name="white">#ffffff</color>
+    <color name="popover">#ffffff</color>
+    <color name="popover_foreground">#232323</color>
+    <color name="input_background">#f3f3f5</color>
+    <color name="switch_background">#cbced4</color>
+    
+    <!-- Chart Colors - Matching adminapp -->
+    <color name="chart_1">#e6b35a</color>
+    <color name="chart_2">#4ca3dd</color>
+    <color name="chart_3">#5b6ee1</color>
+    <color name="chart_4">#f3c96b</color>
+    <color name="chart_5">#f7b267</color>
+    
+    <!-- Sidebar Colors -->
+    <color name="sidebar">#fafafa</color>
+    <color name="sidebar_foreground">#232323</color>
+    <color name="sidebar_primary">#030213</color>
+    <color name="sidebar_primary_foreground">#fafafa</color>
+    <color name="sidebar_accent">#f7f7f7</color>
+    <color name="sidebar_accent_foreground">#343434</color>
+    <color name="sidebar_border">#ebebeb</color>
+    <color name="sidebar_ring">#b5b5b5</color>
+    
+    <!-- Additional Modern Colors -->
+    <color name="success">#22c55e</color>
+    <color name="warning">#f97316</color>
+    <color name="info">#3b82f6</color>
+    <color name="light_gray">#f8f9fa</color>
+    <color name="dark_gray">#6c757d</color>
+    <color name="transparent_black">#80000000</color>
+    <color name="transparent_white">#80ffffff</color>
+    
+    <!-- Database Reset Colors -->
+    <color name="danger">#dc2626</color>
+    <color name="warning_background">#fff7ed</color>
+    
+    <!-- Customer Booking Colors -->
+    <color name="text_primary">#030213</color>
+    <color name="text_secondary">#717182</color>
+    <color name="surface">#ffffff</color>
+    <color name="divider">#e9ebef</color>
 </resources>

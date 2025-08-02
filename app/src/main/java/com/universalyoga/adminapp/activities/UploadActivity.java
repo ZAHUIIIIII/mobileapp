@@ -20,8 +20,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.universalyoga.adminapp.services.FirebaseService;
 import com.universalyoga.adminapp.utils.NetworkUtils;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,42 +70,64 @@ public class UploadActivity extends AppCompatActivity {
 
     private void uploadAllYogaClasses(android.content.Context context, List<YogaCourse> courses, List<YogaInstance> instances) {
         if (!NetworkUtils.isNetworkAvailable(context)) {
-                        runOnUiThread(() -> {
+            runOnUiThread(() -> {
                 Toast.makeText(context, "No internet connection available.", Toast.LENGTH_SHORT).show();
-                            resetUploadState();
-                        });
+                resetUploadState();
+            });
             return;
         }
 
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("yoga_classes");
-
-        // Group instances by courseId
-        Map<Integer, Map<String, Object>> instancesByCourse = new HashMap<>();
-        for (YogaInstance instance : instances) {
-            int courseId = instance.getCourseId();
-            if (!instancesByCourse.containsKey(courseId)) {
-                instancesByCourse.put(courseId, new HashMap<>());
-            }
-            instancesByCourse.get(courseId).put(String.valueOf(instance.getId()), instance);
-        }
-
-        for (YogaCourse course : courses) {
-            Map<String, Object> courseData = new HashMap<>();
-            courseData.put("courseInfo", course);
-            courseData.put("instances", instancesByCourse.getOrDefault(course.getId(), new HashMap<>()));
-            dbRef.child(String.valueOf(course.getId())).setValue(courseData)
-                .addOnSuccessListener(aVoid -> runOnUiThread(() -> {
-                    tvStatus.setText("Upload completed successfully!");
-                    progressBar.setProgress(100);
-                    resetUploadState();
-                    Toast.makeText(context, "Data uploaded to Firebase", Toast.LENGTH_LONG).show();
-                }))
-                .addOnFailureListener(e -> runOnUiThread(() -> {
-                    tvStatus.setText("Upload failed: " + e.getMessage());
+        runOnUiThread(() -> tvStatus.setText("Uploading to Firebase Realtime Database..."));
+        
+        // Upload to Realtime Database
+        FirebaseService.uploadCoursesToRealtimeDB(courses, instances)
+            .thenAccept(success -> {
+                if (success) {
+                    runOnUiThread(() -> {
+                        tvStatus.setText("Upload to Realtime Database completed!");
+                        progressBar.setProgress(50);
+                    });
+                    
+                    // Also upload to Firestore for consistency
+                    runOnUiThread(() -> tvStatus.setText("Uploading to Firestore..."));
+                    FirebaseService.uploadCoursesToFirestore(courses, instances)
+                        .thenAccept(firestoreSuccess -> {
+                            runOnUiThread(() -> {
+                                if (firestoreSuccess) {
+                                    tvStatus.setText("Upload completed successfully!");
+                                    progressBar.setProgress(100);
+                                    Toast.makeText(context, "Data uploaded to Firebase (Realtime DB + Firestore)", Toast.LENGTH_LONG).show();
+                                } else {
+                                    tvStatus.setText("Realtime DB upload successful, Firestore upload failed");
+                                    Toast.makeText(context, "Partial upload completed", Toast.LENGTH_SHORT).show();
+                                }
+                                resetUploadState();
+                            });
+                        })
+                        .exceptionally(throwable -> {
+                            runOnUiThread(() -> {
+                                tvStatus.setText("Realtime DB upload successful, Firestore upload failed");
+                                Toast.makeText(context, "Partial upload completed", Toast.LENGTH_SHORT).show();
+                                resetUploadState();
+                            });
+                            return null;
+                        });
+                } else {
+                    runOnUiThread(() -> {
+                        tvStatus.setText("Upload failed");
+                        Toast.makeText(context, "Upload failed", Toast.LENGTH_SHORT).show();
                         resetUploadState();
-                    Toast.makeText(context, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                }));
+                    });
                 }
+            })
+            .exceptionally(throwable -> {
+                runOnUiThread(() -> {
+                    tvStatus.setText("Upload failed: " + throwable.getMessage());
+                    Toast.makeText(context, "Upload failed: " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+                    resetUploadState();
+                });
+                return null;
+            });
     }
 
     private void uploadInstances(List<YogaInstance> instancesToUpload) {

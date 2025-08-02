@@ -35,6 +35,11 @@ public class YogaInstance {
     @ColumnInfo(name = "capacity")
     private int capacity;
 
+    public YogaInstance() {
+        // Required for Firebase
+    }
+
+    @Ignore
     public YogaInstance(int id, int courseId, String date, String teacher, String comments, int syncStatus, String startTime, String endTime, int enrolled, int capacity) {
         this.id = id;
         this.courseId = courseId;
