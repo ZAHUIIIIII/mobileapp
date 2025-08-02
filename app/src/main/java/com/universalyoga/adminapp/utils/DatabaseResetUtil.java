@@ -17,6 +17,7 @@ import com.universalyoga.adminapp.database.CourseDao;
 import com.universalyoga.adminapp.database.InstanceDao;
 import com.universalyoga.adminapp.database.SyncHistoryDao;
 import com.universalyoga.adminapp.models.Activity;
+import com.universalyoga.adminapp.services.FirebaseService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -78,6 +79,9 @@ public class DatabaseResetUtil {
                 
                 // Clear Firebase Firestore
                 clearFirebaseFirestoreData();
+                
+                // Also use the comprehensive FirebaseService method
+                FirebaseService.clearAllFirebaseData();
                 
                 // Log the reset activity
                 String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());

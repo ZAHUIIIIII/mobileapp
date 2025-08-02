@@ -285,44 +285,103 @@ public class FirebaseService {
     
     // Sync deletions to Firebase (both Realtime DB and Firestore)
     public static CompletableFuture<Boolean> syncDeletionsToFirebase(List<Integer> courseIdsToDelete, 
-                                                                   List<Map<String, Integer>> instanceIdsToDelete) {
+                                                                  List<Map<String, Integer>> instanceIdsToDelete) {
         return CompletableFuture.supplyAsync(() -> {
             try {
-                boolean allSuccess = true;
+                boolean allDeletionsSuccessful = true;
                 
-                // Delete courses
+                // Delete courses from Realtime Database
                 for (Integer courseId : courseIdsToDelete) {
-                    boolean realtimeSuccess = deleteCourseFromRealtimeDB(courseId).get();
-                    boolean firestoreSuccess = deleteCourseFromFirestore(courseId).get();
-                    
-                    if (!realtimeSuccess || !firestoreSuccess) {
-                        allSuccess = false;
-                        Log.e(TAG, "Failed to delete course from Firebase: " + courseId);
+                    boolean success = deleteCourseFromRealtimeDB(courseId).get();
+                    if (!success) {
+                        allDeletionsSuccessful = false;
+                        Log.e(TAG, "Failed to delete course " + courseId + " from Realtime Database");
                     }
                 }
                 
-                // Delete instances
+                // Delete courses from Firestore
+                for (Integer courseId : courseIdsToDelete) {
+                    boolean success = deleteCourseFromFirestore(courseId).get();
+                    if (!success) {
+                        allDeletionsSuccessful = false;
+                        Log.e(TAG, "Failed to delete course " + courseId + " from Firestore");
+                    }
+                }
+                
+                // Delete instances from Realtime Database
                 for (Map<String, Integer> instanceInfo : instanceIdsToDelete) {
                     Integer courseId = instanceInfo.get("courseId");
                     Integer instanceId = instanceInfo.get("instanceId");
-                    
                     if (courseId != null && instanceId != null) {
-                        boolean realtimeSuccess = deleteInstanceFromRealtimeDB(courseId, instanceId).get();
-                        boolean firestoreSuccess = deleteInstanceFromFirestore(courseId, instanceId).get();
-                        
-                        if (!realtimeSuccess || !firestoreSuccess) {
-                            allSuccess = false;
-                            Log.e(TAG, "Failed to delete instance from Firebase: " + instanceId);
+                        boolean success = deleteInstanceFromRealtimeDB(courseId, instanceId).get();
+                        if (!success) {
+                            allDeletionsSuccessful = false;
+                            Log.e(TAG, "Failed to delete instance " + instanceId + " from course " + courseId + " in Realtime Database");
                         }
                     }
                 }
                 
-                return allSuccess;
+                // Delete instances from Firestore
+                for (Map<String, Integer> instanceInfo : instanceIdsToDelete) {
+                    Integer courseId = instanceInfo.get("courseId");
+                    Integer instanceId = instanceInfo.get("instanceId");
+                    if (courseId != null && instanceId != null) {
+                        boolean success = deleteInstanceFromFirestore(courseId, instanceId).get();
+                        if (!success) {
+                            allDeletionsSuccessful = false;
+                            Log.e(TAG, "Failed to delete instance " + instanceId + " from course " + courseId + " in Firestore");
+                        }
+                    }
+                }
                 
+                return allDeletionsSuccessful;
             } catch (Exception e) {
                 Log.e(TAG, "Failed to sync deletions to Firebase", e);
                 return false;
             }
         });
+    }
+    
+    // Clear all Firebase data (Realtime Database and Firestore)
+    public static void clearAllFirebaseData() {
+        try {
+            Log.d(TAG, "Clearing all Firebase data");
+            
+            // Clear Realtime Database
+            if (yogaClassesRef != null) {
+                yogaClassesRef.removeValue();
+                Log.d(TAG, "Realtime Database cleared");
+            }
+            
+            // Clear Firestore collections
+            if (classesCollection != null) {
+                classesCollection.get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (com.google.firebase.firestore.QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            document.getReference().delete();
+                        }
+                        Log.d(TAG, "Firestore classes collection cleared");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Failed to clear Firestore classes collection", e);
+                    });
+            }
+            
+            if (bookingsCollection != null) {
+                bookingsCollection.get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (com.google.firebase.firestore.QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            document.getReference().delete();
+                        }
+                        Log.d(TAG, "Firestore bookings collection cleared");
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e(TAG, "Failed to clear Firestore bookings collection", e);
+                    });
+            }
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to clear Firebase data", e);
+        }
     }
 } 

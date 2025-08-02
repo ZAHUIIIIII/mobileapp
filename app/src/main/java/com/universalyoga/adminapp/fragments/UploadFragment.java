@@ -32,6 +32,9 @@ import com.universalyoga.adminapp.network.ApiService;
 import com.universalyoga.adminapp.utils.NetworkUtils;
 import com.universalyoga.adminapp.services.FirebaseService;
 import com.universalyoga.adminapp.services.AutoSyncService;
+import com.universalyoga.adminapp.utils.DatabaseResetUtil;
+import com.universalyoga.adminapp.utils.ToastHelper;
+import com.universalyoga.adminapp.activities.DatabaseManagementActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +45,7 @@ import java.util.HashMap;
 public class UploadFragment extends Fragment {
     private MaterialButton btnSync, btnRetry;
     private MaterialButton btnViewAll;
+    private MaterialButton btnDatabaseManagement, btnResetAllData;
     private ProgressBar progressBar;
     private TextView tvNetworkStatus, tvLastSync, tvDataSummary, tvDataVolume;
     private TextView tvTotalSyncs, tvProgressText;
@@ -53,6 +57,7 @@ public class UploadFragment extends Fragment {
     private RecyclerView rvSyncHistory;
     private SyncHistoryAdapter syncHistoryAdapter;
     private AutoSyncService autoSyncService;
+    private DatabaseResetUtil resetUtil;
     private boolean isManualSyncInProgress = false;
     private android.widget.ImageView ivNetworkIcon;
 
@@ -71,11 +76,14 @@ public class UploadFragment extends Fragment {
         instanceDao = db.instanceDao();
         apiService = ApiClient.get().create(ApiService.class);
         autoSyncService = new AutoSyncService(requireContext());
+        resetUtil = new DatabaseResetUtil(requireContext());
         
         // Initialize views
         btnSync = view.findViewById(R.id.btnSync);
         btnRetry = view.findViewById(R.id.btnRetry);
         btnViewAll = view.findViewById(R.id.btnViewAll);
+        btnDatabaseManagement = view.findViewById(R.id.btnDatabaseManagement);
+        btnResetAllData = view.findViewById(R.id.btnResetAllData);
         progressBar = view.findViewById(R.id.progressBar);
         tvNetworkStatus = view.findViewById(R.id.tvNetworkStatus);
         tvLastSync = view.findViewById(R.id.tvLastSync);
@@ -108,6 +116,10 @@ public class UploadFragment extends Fragment {
         btnRetry.setOnClickListener(v -> performUpload());
         btnViewAll.setOnClickListener(v -> showAllSyncHistory());
         // btnClearErrors.setOnClickListener(v -> clearAllErrors()); // This line is removed
+        
+        // Database management button listeners
+        btnDatabaseManagement.setOnClickListener(v -> openDatabaseManagement());
+        btnResetAllData.setOnClickListener(v -> showResetConfirmation());
         
         // Set up auto-sync switch - disabled by default
         switchAutoSync.setChecked(false); // Always start disabled
@@ -188,19 +200,23 @@ public class UploadFragment extends Fragment {
 
             requireActivity().runOnUiThread(() -> {
                 if (coursesToUpload.isEmpty() && instancesToUpload.isEmpty()) {
-                    tvProgressText.setText("No data to upload");
-                    updateSyncHistory(false, "No data available for upload", 0);
-                    resetUploadState();
-                    return;
+                    tvProgressText.setText("Clearing Firebase data (local DB is empty)...");
+                    progressBar.setProgress(25);
+                } else {
+                    tvProgressText.setText("5% - Starting Firebase upload...");
                 }
-                tvProgressText.setText("5% - Starting Firebase upload...");
             });
 
             // Sync pending deletions first
             syncPendingDeletions();
 
-            // Perform actual Firebase upload
-            uploadAllYogaClasses(requireContext(), coursesToUpload, instancesToUpload);
+            // If local database is empty, clear Firebase data
+            if (coursesToUpload.isEmpty() && instancesToUpload.isEmpty()) {
+                clearFirebaseData();
+            } else {
+                // Perform actual Firebase upload
+                uploadAllYogaClasses(requireContext(), coursesToUpload, instancesToUpload);
+            }
         });
     }
     
@@ -437,5 +453,97 @@ public class UploadFragment extends Fragment {
                 Log.e("UploadFragment", "Error syncing pending deletions", e);
             }
         });
+    }
+
+    private void clearFirebaseData() {
+        requireActivity().runOnUiThread(() -> {
+            progressBar.setProgress(50);
+            tvProgressText.setText("50% - Clearing Firebase data...");
+        });
+        
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                Log.d("UploadFragment", "Clearing all Firebase data due to empty local database.");
+                
+                // Clear Firebase data
+                FirebaseService.clearAllFirebaseData();
+                
+                // Wait a bit for Firebase operations to complete
+                Thread.sleep(2000);
+                
+                requireActivity().runOnUiThread(() -> {
+                    progressBar.setProgress(100);
+                    tvProgressText.setText("100% - Firebase data cleared successfully!");
+                    
+                    // Update sync history
+                    updateSyncHistory(true, "Firebase data cleared (local DB was empty)", 0);
+                    
+                    // Show success message
+                    ToastHelper.showSuccessToast(requireContext(), "All Firebase data cleared successfully");
+                    
+                    // Update data summary
+                    updateDataSummary();
+                    
+                    // Reset upload state
+                    resetUploadState();
+                });
+                
+            } catch (Exception e) {
+                Log.e("UploadFragment", "Error clearing Firebase data", e);
+                requireActivity().runOnUiThread(() -> {
+                    progressBar.setProgress(0);
+                    tvProgressText.setText("Failed to clear Firebase data");
+                    
+                    // Update sync history with error
+                    updateSyncHistory(false, "Failed to clear Firebase data: " + e.getMessage(), 0);
+                    
+                    // Show error message
+                    ToastHelper.showErrorToast(requireContext(), "Failed to clear Firebase data: " + e.getMessage());
+                    
+                    // Reset upload state
+                    resetUploadState();
+                });
+            }
+        });
+    }
+    
+    // Database Management Methods
+    
+    private void openDatabaseManagement() {
+        android.content.Intent intent = new android.content.Intent(requireContext(), DatabaseManagementActivity.class);
+        startActivity(intent);
+    }
+    
+    private void showResetConfirmation() {
+        new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+            .setTitle("Reset All Data")
+            .setMessage("⚠️ This will permanently delete ALL data including courses, instances, activities, and Firebase data. This action cannot be undone. Are you sure?")
+            .setPositiveButton("Reset All", (dialog, which) -> {
+                resetUtil.resetAllData(new DatabaseResetUtil.ResetCallback() {
+                    @Override
+                    public void onResetStarted() {
+                        requireActivity().runOnUiThread(() -> {
+                            Toast.makeText(requireContext(), "Resetting all data...", Toast.LENGTH_SHORT).show();
+                        });
+                    }
+                    
+                    @Override
+                    public void onResetCompleted() {
+                        requireActivity().runOnUiThread(() -> {
+                            ToastHelper.showSuccessToast(requireContext(), "All data reset successfully");
+                            updateDataSummary();
+                        });
+                    }
+                    
+                    @Override
+                    public void onResetFailed(String error) {
+                        requireActivity().runOnUiThread(() -> {
+                            ToastHelper.showErrorToast(requireContext(), "Reset failed: " + error);
+                        });
+                    }
+                });
+            })
+            .setNegativeButton("Cancel", null)
+            .show();
     }
 }
